@@ -13,7 +13,16 @@ public class Drivetrain extends TankDrivetrain {
 
     ADXRS450_Gyro gyro;
 
-    public Drivetrain() {
+    private static Drivetrain instance;
+
+    public static Drivetrain getInstance() {
+        if (instance==null){
+            instance = new Drivetrain();
+        }
+        return instance;
+    }
+
+    private Drivetrain() {
         super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_NEO_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                 new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_NEO_2, CANSparkMaxLowLevel.MotorType.kBrushless)),
                 new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_NEO_1, CANSparkMaxLowLevel.MotorType.kBrushless),
