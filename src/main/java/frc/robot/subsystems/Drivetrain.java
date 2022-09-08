@@ -4,14 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.spikes2212.command.drivetrains.TankDrivetrain;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
 
-    ADXRS450_Gyro gyro;
+    private ADXRS450_Gyro gyro;
 
     private static Drivetrain instance;
 
