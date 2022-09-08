@@ -1,14 +1,14 @@
 package frc.robot;
 
-import javax.sound.sampled.Port;
 
 public class RobotMap {
 
     public interface CAN {
-        int PORT_LEFT1 = 1;
-        int PORT_LEFT2 = 2;
-        int PORT_RIGHT1 = 3;
-        int PORT_RIGHT2 = 4;
+
+        int DRIVETRAIN_LEFT_SPARKMAX_1 = -1;
+        int DRIVETRAIN_LEFT_SPARKMAX_2 = -1;
+        int DRIVETRAIN_RIGHT_SPARKMAX_1 = -1;
+        int DRIVETRAIN_RIGHT_SPARKMAX_2 = -1;
     }
 
     public interface DIO {

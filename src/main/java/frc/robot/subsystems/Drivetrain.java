@@ -13,10 +13,10 @@ public class Drivetrain extends TankDrivetrain {
     private Drivetrain instance;
 
     private Drivetrain() {
-        super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.PORT_LEFT1, CANSparkMaxLowLevel.MotorType.kBrushless),
-                        new CANSparkMax(RobotMap.CAN.PORT_LEFT2, CANSparkMaxLowLevel.MotorType.kBrushless)),
-                new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.PORT_LEFT1, CANSparkMaxLowLevel.MotorType.kBrushless),
-                        new CANSparkMax(RobotMap.CAN.PORT_LEFT2, CANSparkMaxLowLevel.MotorType.kBrushless)));
+        super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
+                        new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless)),
+                new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
+                        new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless)));
         gyro = new ADXRS450_Gyro();
     }
 
@@ -24,8 +24,9 @@ public class Drivetrain extends TankDrivetrain {
     public void configureDashboard() {
         rootNamespace.putNumber("TankDrive", gyro::getAngle);
     }
-    public Drivetrain getInstance(){
-        if(instance == null){
+
+    public Drivetrain getInstance() {
+        if (instance == null) {
             instance = new Drivetrain();
         }
         return instance;
