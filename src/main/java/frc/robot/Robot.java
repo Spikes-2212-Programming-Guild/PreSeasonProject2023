@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.spikes2212.command.drivetrains.TankDrivetrain;
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,8 +17,8 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
 
-    Drivetrain drivetrain;
-    OI oi;
+    private Drivetrain drivetrain;
+    private OI oi;
 
     /**
      * This function is run when the robot is first started up and should be used for any
