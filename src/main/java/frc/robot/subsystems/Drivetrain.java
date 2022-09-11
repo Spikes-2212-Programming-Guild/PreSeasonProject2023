@@ -9,8 +9,16 @@ import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
 
+    private static Drivetrain instance;
+    
     private ADXRS450_Gyro gyro;
-    private Drivetrain instance;
+        
+    public static Drivetrain getInstance() {
+        if (instance == null) {
+            instance = new Drivetrain();
+        }
+        return instance;
+    }
 
     private Drivetrain() {
         super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
@@ -23,12 +31,5 @@ public class Drivetrain extends TankDrivetrain {
     @Override
     public void configureDashboard() {
         rootNamespace.putNumber("TankDrive", gyro::getAngle);
-    }
-
-    public Drivetrain getInstance() {
-        if (instance == null) {
-            instance = new Drivetrain();
-        }
-        return instance;
     }
 }
