@@ -4,10 +4,6 @@ public class RobotMap {
 
     public interface CAN {
 
-        int DRIVETRAIN_LEFT_SPARKMAX_1 = -1;
-        int DRIVETRAIN_LEFT_SPARKMAX_2 = -1;
-        int DRIVETRAIN_RIGHT_SPARKMAX_1 = -1;
-        int DRIVETRAIN_RIGHT_SPARKMAX_2 = -1;
     }
 
     public interface DIO {
