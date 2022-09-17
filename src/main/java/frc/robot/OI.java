@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class OI /*GEVALD*/ {
 
-    Joystick left = new Joystick(0);
-    Joystick right = new Joystick(1);
+    private final Joystick left = new Joystick(0);
+    private final Joystick right = new Joystick(1);
 
     public OI() {
     }
