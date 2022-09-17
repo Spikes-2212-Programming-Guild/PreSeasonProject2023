@@ -9,12 +9,14 @@ import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
 
-    private CANSparkMax left1;
-    private CANSparkMax left2;
-    private CANSparkMax right1;
-    private CANSparkMax right2;
     private static Drivetrain instance;
-    private ADXRS450_Gyro gyro;
+
+    private final CANSparkMax left1;
+    private final CANSparkMax left2;
+    private final CANSparkMax right1;
+    private final CANSparkMax right2;
+
+    private final ADXRS450_Gyro gyro;
 
     public static Drivetrain getInstance() {
         if (instance == null) {
