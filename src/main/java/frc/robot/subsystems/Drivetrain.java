@@ -9,9 +9,9 @@ import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
 
-    private ADXRS450_Gyro gyro;
-
     private static Drivetrain instance;
+
+    private ADXRS450_Gyro gyro;
 
     public static Drivetrain getInstance() {
         if (instance==null){
@@ -21,10 +21,10 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     private Drivetrain() {
-        super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_NEO_1, CANSparkMaxLowLevel.MotorType.kBrushless),
-                new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_NEO_2, CANSparkMaxLowLevel.MotorType.kBrushless)),
-                new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_NEO_1, CANSparkMaxLowLevel.MotorType.kBrushless),
-                new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_NEO_2, CANSparkMaxLowLevel.MotorType.kBrushless)));
+        super(new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
+                new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless)),
+                new MotorControllerGroup(new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
+                new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless)));
         gyro = new ADXRS450_Gyro();
     }
 
