@@ -18,11 +18,11 @@ public class Climber extends DashboardedSubsystem {
         if (instance == null)
             instance = new Climber("climber",
                     new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLIMBER_FRONT_SOLENOID_1_FORWARD,
-                            RobotMap.PCM.CLIMBER_FRONT_SOLENOID_1_BACKWORD),
+                            RobotMap.PCM.CLIMBER_FRONT_SOLENOID_1_REVERSE),
                     new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLIMBER_FRONT_SOLENOID_2_FORWARD,
-                            RobotMap.PCM.CLIMBER_FRONT_SOLENOID_2_BACKWORD),
+                            RobotMap.PCM.CLIMBER_FRONT_SOLENOID_2_REVERSE),
                     new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLIMBER_BACK_SOLENOID_FORWARD,
-                            RobotMap.PCM.CLIMBER_BACK_SOLENOID_BACKWORD)
+                            RobotMap.PCM.CLIMBER_BACK_SOLENOID_REVERSE)
             );
         return instance;
     }
@@ -61,9 +61,9 @@ public class Climber extends DashboardedSubsystem {
     @Override
     public void configureDashboard() {
         namespace.putData("front solenoids forward", frontSolenoidsOn());
-        namespace.putData("front solenoids backword", frontSolenoidsOff());
+        namespace.putData("front solenoids reverse", frontSolenoidsOff());
         namespace.putData("back solenoids forward", backSolenoidOn());
-        namespace.putData("back solenoids backword", backSolenoidOff());
+        namespace.putData("back solenoids reverse", backSolenoidOff());
         namespace.putString("front solenoid 1 value", frontSolenoid1.get()::toString);
         namespace.putString("front solenoid 2 value", frontSolenoid2.get()::toString);
         namespace.putString("back solenoid 1 value", backSolenoid.get()::toString);
