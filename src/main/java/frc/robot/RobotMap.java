@@ -15,6 +15,15 @@ public class RobotMap {
         int ULTRASONIC_CHANNEL_2 = -1;
     }
 
+    public interface PCM {
+        int CLIMBER_FRONT_SOLENOID_1_FORWARD = -1;
+        int CLIMBER_FRONT_SOLENOID_2_FORWARD = -1;
+        int CLIMBER_BACK_SOLENOID_FORWARD = -1;
+        int CLIMBER_FRONT_SOLENOID_1_BACKWORD = -1;
+        int CLIMBER_FRONT_SOLENOID_2_BACKWORD = -1;
+        int CLIMBER_BACK_SOLENOID_BACKWORD = -1;
+    }
+
     public interface DIO {
 
     }
