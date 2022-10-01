@@ -21,4 +21,10 @@ public class RobotMap {
     public interface AIN {
 
     }
+
+    public interface PCM {
+
+        int CLAW_FORWARD_SOLENOID = -1;
+        int CLAW_REVERSE_SOLENOID = -1;
+    }
 }
