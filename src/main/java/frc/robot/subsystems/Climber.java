@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
 
 /**
- * Controls the three DoubleSolenoids that makes the robot climb
+ * Controls the three {@link DoubleSolenoid}s that make the robot climb.
  */
 public class Climber extends DashboardedSubsystem {
 
