@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
 
+// This subsystem makes the robot climb
 public class Climber extends DashboardedSubsystem {
 
     private static Climber instance;
