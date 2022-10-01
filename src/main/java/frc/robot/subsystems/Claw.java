@@ -21,8 +21,8 @@ public class Claw extends SubsystemBase {
     }
 
     private Claw() {
-        solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_FORWARD_SOLENOID,
-                RobotMap.PCM.CLAW_REVERSE_SOLENOID);
+        solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
+                RobotMap.PCM.CLAW_SOLENOID_REVERSE);
     }
 
     public InstantCommand solenoidForward() {
