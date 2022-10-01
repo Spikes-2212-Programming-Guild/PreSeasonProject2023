@@ -1,12 +1,15 @@
 package frc.robot.subsystems;
 
 import com.spikes2212.command.DashboardedSubsystem;
+import com.spikes2212.dashboard.Namespace;
 import com.spikes2212.dashboard.RootNamespace;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.RobotMap;
+
+import javax.naming.Name;
 
 public class Claw extends DashboardedSubsystem {
 
@@ -16,15 +19,15 @@ public class Claw extends DashboardedSubsystem {
 
     public static Claw getInstance() {
         if (instance == null) {
-            instance = new Claw();
+            instance = new Claw("claw", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
+                    RobotMap.PCM.CLAW_SOLENOID_REVERSE));
         }
         return instance;
     }
 
-    private Claw() {
-        super(new RootNamespace("claw"));
-        solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
-                RobotMap.PCM.CLAW_SOLENOID_REVERSE);
+    private Claw(String namespaceName, DoubleSolenoid solenoid) {
+        super(namespaceName);
+        this.solenoid = solenoid;
     }
 
     public InstantCommand solenoidForward() {
@@ -37,8 +40,8 @@ public class Claw extends DashboardedSubsystem {
 
     @Override
     public void configureDashboard() {
-        namespace.putData("claw solenoid forward", solenoidForward());
-        namespace.putData("claw solenoid reverse", solenoidReverse());
-        namespace.putString("claw solenoid value", solenoid.get()::toString);
+        namespace.putData("solenoid forward", solenoidForward());
+        namespace.putData("solenoid reverse", solenoidReverse());
+        namespace.putString("solenoid value", solenoid.get()::toString);
     }
 }
