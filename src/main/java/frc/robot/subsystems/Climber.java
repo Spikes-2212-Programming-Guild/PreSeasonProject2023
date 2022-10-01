@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 
 import com.spikes2212.command.DashboardedSubsystem;
-import com.spikes2212.dashboard.Namespace;
-import com.spikes2212.dashboard.RootNamespace;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
