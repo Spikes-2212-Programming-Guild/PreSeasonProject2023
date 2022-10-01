@@ -30,7 +30,7 @@ public class Climber extends DashboardedSubsystem {
     }
 
     private Climber(String name, DoubleSolenoid frontSolenoid1, DoubleSolenoid frontSolenoid2, DoubleSolenoid backSolenoid) {
-        super(new RootNamespace(name));
+        super(name);
         this.frontSolenoid1 = frontSolenoid1;
         this.frontSolenoid2 = frontSolenoid2;
         this.backSolenoid = backSolenoid;
