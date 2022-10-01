@@ -5,8 +5,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
-/*
-controls the three DoubleSolenoids that makes the robot climb
+
+/**
+ * Controls the three DoubleSolenoids that makes the robot climb
  */
 public class Climber extends DashboardedSubsystem {
 
