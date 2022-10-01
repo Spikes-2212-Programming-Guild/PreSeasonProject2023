@@ -4,18 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class OI /*GEVALD*/ {
 
-    private Joystick left = new Joystick(0);
-    private Joystick right = new Joystick(1);
-
     public OI() {
 
-    }
-
-    public double getLeftX() {
-        return left.getX();
-    }
-
-    public double getRightY() {
-        return -right.getY();
     }
 }
