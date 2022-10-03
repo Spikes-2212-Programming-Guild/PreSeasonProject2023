@@ -39,6 +39,7 @@ public class Drivetrain extends TankDrivetrain {
         this.right1 = right1;
         this.right2 = right2;
         this.pigeon = pigeon;
+        configureDashboard();
     }
 
     @Override
