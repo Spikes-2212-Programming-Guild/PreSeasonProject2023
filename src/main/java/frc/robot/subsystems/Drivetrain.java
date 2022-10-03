@@ -44,10 +44,10 @@ public class Drivetrain extends TankDrivetrain {
 
     @Override
     public void configureDashboard() {
-        rootNamespace.putNumber("pigeon yaw", pigeon::getYaw);
-        rootNamespace.putNumber("left neo 1 encoder value", left1.getEncoder()::getPosition);
-        rootNamespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
-        rootNamespace.putNumber("right neo 1 encoder value", right1.getEncoder()::getPosition);
-        rootNamespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
+        namespace.putNumber("pigeon yaw", pigeon::getYaw);
+        namespace.putNumber("left neo 1 encoder value", left1.getEncoder()::getPosition);
+        namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
+        namespace.putNumber("right neo 1 encoder value", right1.getEncoder()::getPosition);
+        namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
     }
 }
