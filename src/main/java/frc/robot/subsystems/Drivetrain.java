@@ -43,6 +43,10 @@ public class Drivetrain extends TankDrivetrain {
         configureDashboard();
     }
 
+    public double getYaw(){
+        return pigeon.getYaw();
+    }
+
     public void resetPigeon() {
         pigeon.reset();
     }
@@ -55,7 +59,7 @@ public class Drivetrain extends TankDrivetrain {
                 return true;
             }
         });
-        namespace.putNumber("pigeon yaw", pigeon::getYaw);
+        namespace.putNumber("pigeon yaw", this::getYaw);
         namespace.putNumber("left neo 1 encoder value", left1.getEncoder()::getPosition);
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
         namespace.putNumber("right neo 1 encoder value", right1.getEncoder()::getPosition);
