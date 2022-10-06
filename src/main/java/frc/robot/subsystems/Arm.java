@@ -9,7 +9,7 @@ import frc.robot.RobotMap;
 import java.util.List;
 
 /**
- * Controls the double-jointed arm.
+ * Controls the double-jointed arm and placing the cubes.
  */
 public class Arm extends MotoredGenericSubsystem {
 
