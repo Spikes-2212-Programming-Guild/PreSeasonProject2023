@@ -37,9 +37,15 @@ public class Arm extends MotoredGenericSubsystem {
     private Arm(String namespaceName, CANSparkMax... motors) {
         super(namespaceName, motors);
         this.encoder = List.of(motors).get(0).getEncoder();
+        configureDashboard();
     }
 
     public double getEncoderPosition() {
         return encoder.getPosition();
+    }
+
+    @Override
+    public void configureDashboard() {
+        namespace.putNumber("encoder position",this::getEncoderPosition);
     }
 }

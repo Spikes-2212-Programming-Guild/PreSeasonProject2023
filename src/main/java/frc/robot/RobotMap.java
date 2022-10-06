@@ -14,7 +14,6 @@ public class RobotMap {
         int ARM_LOWER_SPARKMAX_2 = -1;
         int ARM_UPPER_SPARKMAX = -1;
 
-
     }
 
     public interface DIO {
