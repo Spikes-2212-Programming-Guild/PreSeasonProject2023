@@ -26,20 +26,21 @@ public class Claw extends DashboardedSubsystem {
     private Claw(String namespaceName, DoubleSolenoid solenoid) {
         super(namespaceName);
         this.solenoid = solenoid;
+        configureDashboard();
     }
 
-    public InstantCommand solenoidForward() {
+    public InstantCommand openSolenoid() {
         return new InstantCommand(() -> solenoid.set(DoubleSolenoid.Value.kForward));
     }
 
-    public InstantCommand solenoidReverse() {
+    public InstantCommand closeSolenoid() {
         return new InstantCommand(() -> solenoid.set(DoubleSolenoid.Value.kReverse));
     }
 
     @Override
     public void configureDashboard() {
-        namespace.putData("solenoid forward", solenoidForward());
-        namespace.putData("solenoid reverse", solenoidReverse());
+        namespace.putData("solenoid forward", openSolenoid());
+        namespace.putData("solenoid reverse", closeSolenoid());
         namespace.putString("solenoid value", solenoid.get()::toString);
     }
 }
