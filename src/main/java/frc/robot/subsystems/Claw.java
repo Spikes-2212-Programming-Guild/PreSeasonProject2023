@@ -39,8 +39,8 @@ public class Claw extends DashboardedSubsystem {
 
     @Override
     public void configureDashboard() {
-        namespace.putData("solenoid forward", openSolenoid());
-        namespace.putData("solenoid reverse", closeSolenoid());
+        namespace.putData("open solenoid", openSolenoid());
+        namespace.putData("close solenoid", closeSolenoid());
         namespace.putString("solenoid value", solenoid.get()::toString);
     }
 }
