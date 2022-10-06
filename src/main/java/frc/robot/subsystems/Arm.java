@@ -13,7 +13,7 @@ public class Arm extends MotoredGenericSubsystem {
 
     private static Arm upperInstance;
     private static Arm lowerInstance;
-    private RelativeEncoder encoder;
+    private final RelativeEncoder encoder;
 
     private Arm(String namespaceName, CANSparkMax... motorControllers) {
         super(namespaceName, motorControllers);
