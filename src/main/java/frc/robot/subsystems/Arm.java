@@ -34,4 +34,8 @@ public class Arm extends MotoredGenericSubsystem {
         }
         return lowerInstance;
     }
+
+    public double getEncoderPosition() {
+        return encoder.getPosition();
+    }
 }
