@@ -11,7 +11,7 @@ import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
 
-    public static final double MILLIMETER_TO_CENTIMETER = 10.0;
+    public static final double MILLIMETER_TO_CENTIMETER = 0.1;
     private static Drivetrain instance;
 
     private final CANSparkMax left1;
@@ -50,7 +50,7 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     public double getUltrasonicInCM(){
-        return ultrasonic.getRangeMM()/MILLIMETER_TO_CENTIMETER;
+        return ultrasonic.getRangeMM()*MILLIMETER_TO_CENTIMETER;
     }
 
     public double getYaw() {
