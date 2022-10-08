@@ -68,7 +68,7 @@ public class Drivetrain extends TankDrivetrain {
         pigeon.reset();
     }
 
-    public double getUltrasonicInCM(){
+    public double getUltrasonicDistanceInCM(){
         return ultrasonic.getRangeMM()*MILLIMETER_TO_CENTIMETER;
     }
 
@@ -93,6 +93,6 @@ public class Drivetrain extends TankDrivetrain {
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
         namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
-        namespace.putNumber("ultrasonic distance value",this::getUltrasonicInCM);
+        namespace.putNumber("ultrasonic distance value",this::getUltrasonicDistanceInCM);
     }
 }
