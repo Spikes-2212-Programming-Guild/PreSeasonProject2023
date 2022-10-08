@@ -54,6 +54,8 @@ public class Drivetrain extends TankDrivetrain {
         Ultrasonic.setAutomaticMode(true);
         this.leftEncoder = left1.getEncoder();
         this.rightEncoder = right1.getEncoder();
+        leftEncoder.setPositionConversionFactor(DISTANCE_PER_PULSE);
+        rightEncoder.setPositionConversionFactor(DISTANCE_PER_PULSE);
         configureDashboard();
     }
 
