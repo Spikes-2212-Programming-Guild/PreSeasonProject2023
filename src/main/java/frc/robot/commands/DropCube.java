@@ -1,18 +1,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Gripper;
 
 /**
  * Opens the claw to drop cubes.
  *
- * @see Claw
+ * @see Gripper
  */
 
 public class DropCube extends InstantCommand {
 
-    public DropCube(Claw claw) {
-        addRequirements(claw);
-        claw.openSolenoid();
+    public DropCube(Gripper gripper) {
+        addRequirements(gripper);
+        gripper.openSolenoid();
     }
 }

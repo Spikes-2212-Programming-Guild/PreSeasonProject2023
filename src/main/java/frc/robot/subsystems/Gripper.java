@@ -9,21 +9,21 @@ import frc.robot.RobotMap;
 /**
  * Controls the claw that is responsible for holding cubes.
  */
-public class Claw extends DashboardedSubsystem {
+public class Gripper extends DashboardedSubsystem {
 
-    private static Claw instance;
+    private static Gripper instance;
 
     private final DoubleSolenoid solenoid;
 
-    public static Claw getInstance() {
+    public static Gripper getInstance() {
         if (instance == null) {
-            instance = new Claw("claw", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
+            instance = new Gripper("gripper", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
                     RobotMap.PCM.CLAW_SOLENOID_REVERSE));
         }
         return instance;
     }
 
-    private Claw(String namespaceName, DoubleSolenoid solenoid) {
+    private Gripper(String namespaceName, DoubleSolenoid solenoid) {
         super(namespaceName);
         this.solenoid = solenoid;
         configureDashboard();
