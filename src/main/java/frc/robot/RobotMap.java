@@ -10,6 +10,7 @@ public class RobotMap {
         int DRIVETRAIN_RIGHT_SPARKMAX_2 = -1;
 
         int PIGEON_TALON = -1;
+        
         int ULTRASONIC_CHANNEL_1 = -1;
         int ULTRASONIC_CHANNEL_2 = -1;
     }
