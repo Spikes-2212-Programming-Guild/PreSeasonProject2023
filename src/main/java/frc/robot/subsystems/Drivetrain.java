@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.RelativeEncoder;
 import com.spikes2212.command.drivetrains.TankDrivetrain;
 import com.spikes2212.util.PigeonWrapper;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
 
 public class Drivetrain extends TankDrivetrain {
+
+    private static final double DISTANCE_PER_PULSE = -1; // @todo
 
     private static Drivetrain instance;
 
@@ -18,6 +21,9 @@ public class Drivetrain extends TankDrivetrain {
     private final CANSparkMax right2;
 
     private final PigeonWrapper pigeon;
+
+    private final RelativeEncoder leftEncoder;
+    private final RelativeEncoder rightEncoder;
 
     public static Drivetrain getInstance() {
         if (instance == null) {
@@ -40,6 +46,8 @@ public class Drivetrain extends TankDrivetrain {
         this.right1 = right1;
         this.right2 = right2;
         this.pigeon = pigeon;
+        this.leftEncoder = left1.getEncoder();
+        this.rightEncoder = right1.getEncoder();
         configureDashboard();
     }
 
@@ -54,6 +62,14 @@ public class Drivetrain extends TankDrivetrain {
         pigeon.reset();
     }
 
+    public double getLeftEncoderPosition() {
+        return leftEncoder.getPosition();
+    }
+
+    public double getRightEncoderPosition() {
+        return rightEncoder.getPosition();
+    }
+
     @Override
     public void configureDashboard() {
         namespace.putData("reset pigeon", new InstantCommand(this::resetPigeon) {
@@ -63,9 +79,9 @@ public class Drivetrain extends TankDrivetrain {
             }
         });
         namespace.putNumber("pigeon yaw", this::getYaw);
-        namespace.putNumber("left neo 1 encoder value", left1.getEncoder()::getPosition);
+        namespace.putNumber("left neo 1 encoder value", this::getLeftEncoderPosition);
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
-        namespace.putNumber("right neo 1 encoder value", right1.getEncoder()::getPosition);
+        namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
     }
 }
