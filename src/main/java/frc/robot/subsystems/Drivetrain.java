@@ -4,11 +4,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.spikes2212.command.drivetrains.TankDrivetrain;
+import com.spikes2212.control.PIDSettings;
+import com.spikes2212.dashboard.Namespace;
 import com.spikes2212.util.PigeonWrapper;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
+
+import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
 
@@ -16,6 +20,14 @@ public class Drivetrain extends TankDrivetrain {
     public static final double DISTANCE_PER_PULSE = -1; // @todo
 
     private static Drivetrain instance;
+
+    private final Namespace cameraPIDNamespace;
+    private final Supplier<Double> kPCamera;
+    private final Supplier<Double> kICamera;
+    private final Supplier<Double> kDCamera;
+    private final Supplier<Double> toleranceCamera;
+    private final Supplier<Double> waitTimeCamera;
+    private final PIDSettings pidSettingsCamera;
 
     private final CANSparkMax left1;
     private final CANSparkMax left2;
@@ -45,6 +57,14 @@ public class Drivetrain extends TankDrivetrain {
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
                        CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Ultrasonic ultrasonic) {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
+        this.cameraPIDNamespace = namespace.addChild("camera pid");
+        this.kPCamera = cameraPIDNamespace.addConstantDouble("kP", 0);
+        this.kICamera = cameraPIDNamespace.addConstantDouble("kI", 0);
+        this.kDCamera = cameraPIDNamespace.addConstantDouble("kD", 0);
+        this.toleranceCamera = cameraPIDNamespace.addConstantDouble("tolerance", 0);
+        this.waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
+        this.pidSettingsCamera = new PIDSettings(kPCamera, kICamera, kDCamera,
+                toleranceCamera, waitTimeCamera);
         this.left1 = left1;
         this.left2 = left2;
         this.right1 = right1;
@@ -70,8 +90,8 @@ public class Drivetrain extends TankDrivetrain {
         pigeon.reset();
     }
 
-    public double getUltrasonicDistanceInCM(){
-        return ultrasonic.getRangeMM()*MILLIMETER_TO_CENTIMETER;
+    public double getUltrasonicDistanceInCM() {
+        return ultrasonic.getRangeMM() * MILLIMETER_TO_CENTIMETER;
     }
 
     public double getLeftEncoderPosition() {
@@ -95,6 +115,6 @@ public class Drivetrain extends TankDrivetrain {
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
         namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
-        namespace.putNumber("ultrasonic distance value",this::getUltrasonicDistanceInCM);
+        namespace.putNumber("ultrasonic distance value", this::getUltrasonicDistanceInCM);
     }
 }
