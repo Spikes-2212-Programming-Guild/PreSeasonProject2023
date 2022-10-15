@@ -21,21 +21,21 @@ public class Drivetrain extends TankDrivetrain {
 
     private static Drivetrain instance;
 
-    private final Namespace cameraPIDNamespace;
-    private final Supplier<Double> kPCamera;
-    private final Supplier<Double> kICamera;
-    private final Supplier<Double> kDCamera;
-    private final Supplier<Double> toleranceCamera;
-    private final Supplier<Double> waitTimeCamera;
+    private final Namespace cameraPIDNamespace = namespace.addChild("camera pid");
+    private final Supplier<Double> kPCamera = cameraPIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kICamera = cameraPIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDCamera = cameraPIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceCamera = cameraPIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings pidSettingsCamera;
 
-    private final Namespace drivePIDNamespace;
-    private final Supplier<Double> kPDrive;
-    private final Supplier<Double> kIDrive;
-    private final Supplier<Double> kDDrive;
-    private final Supplier<Double> toleranceDrive;
-    private final Supplier<Double> waitTimeDrive;
-    private final PIDSettings pidSettingsDrive
+    private final Namespace drivePIDNamespace = namespace.addChild("drive pid");
+    private final Supplier<Double> kPDrive = cameraPIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kIDrive = cameraPIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDDrive = cameraPIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceDrive = cameraPIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeDrive = cameraPIDNamespace.addConstantDouble("wait time", 0);
+    private final PIDSettings pidSettingsDrive;
 
     private final CANSparkMax left1;
     private final CANSparkMax left2;
@@ -65,20 +65,8 @@ public class Drivetrain extends TankDrivetrain {
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
                        CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Ultrasonic ultrasonic) {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
-        this.cameraPIDNamespace = namespace.addChild("camera pid");
-        this.kPCamera = cameraPIDNamespace.addConstantDouble("kP", 0);
-        this.kICamera = cameraPIDNamespace.addConstantDouble("kI", 0);
-        this.kDCamera = cameraPIDNamespace.addConstantDouble("kD", 0);
-        this.toleranceCamera = cameraPIDNamespace.addConstantDouble("tolerance", 0);
-        this.waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
         this.pidSettingsCamera = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
-        this.drivePIDNamespace = namespace.addChild("cdrive pid");
-        this.kPDrive = cameraPIDNamespace.addConstantDouble("kP", 0);
-        this.kIDrive = cameraPIDNamespace.addConstantDouble("kI", 0);
-        this.kDDrive = cameraPIDNamespace.addConstantDouble("kD", 0);
-        this.toleranceDrive = cameraPIDNamespace.addConstantDouble("tolerance", 0);
-        this.waitTimeDrive = cameraPIDNamespace.addConstantDouble("wait time", 0);
         this.pidSettingsDrive = new PIDSettings(kPDrive, kIDrive, kDDrive,
                 toleranceDrive, waitTimeDrive);
         this.left1 = left1;
