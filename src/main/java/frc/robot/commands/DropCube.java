@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Gripper;
 
 /**
@@ -12,7 +13,7 @@ import frc.robot.subsystems.Gripper;
 public class DropCube extends InstantCommand {
 
     public DropCube(Gripper gripper) {
-        addRequirements(gripper);
+        addRequirements((Subsystem) gripper);
         gripper.openSolenoid();
     }
 }
