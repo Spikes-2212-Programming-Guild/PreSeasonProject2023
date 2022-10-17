@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Gripper;
 
 /**
@@ -12,7 +11,7 @@ import frc.robot.subsystems.Gripper;
 public class CloseGripper extends InstantCommand {
 
     public CloseGripper(Gripper gripper) {
-        addRequirements((Subsystem) gripper);
+        addRequirements(gripper);
         gripper.closeSolenoid();
     }
 }
