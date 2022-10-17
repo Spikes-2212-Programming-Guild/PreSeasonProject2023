@@ -50,7 +50,7 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private InstantCommand openFrontSolenoid(Climber climber) {
-        return climber.frontSolenoidsOn();
+        return climber.openFrontSolenoids();
     }
 
     private ParallelRaceGroup driveForward(Drivetrain drivetrain, Supplier<Double> distanceFromHab) {
@@ -61,14 +61,14 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private InstantCommand openBackSolenoid(Climber climber) {
-        return climber.backSolenoidOn();
+        return climber.openBackSolenoids();
     }
 
     private InstantCommand closeFrontSolenoid(Climber climber) {
-        return climber.frontSolenoidsOff();
+        return climber.closeFrontSolenoids();
     }
 
     private InstantCommand closeBackSolenoid(Climber climber) {
-        return climber.backSolenoidOff();
+        return climber.closeBackSolenoids();
     }
 }

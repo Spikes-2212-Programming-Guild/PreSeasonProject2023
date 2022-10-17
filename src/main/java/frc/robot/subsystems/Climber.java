@@ -18,7 +18,7 @@ public class Climber extends DashboardedSubsystem {
     private final DoubleSolenoid backSolenoid;
 
     public static Climber getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new Climber("climber",
                     new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLIMBER_FRONT_SOLENOID_1_FORWARD,
                             RobotMap.PCM.CLIMBER_FRONT_SOLENOID_1_REVERSE),
@@ -27,17 +27,18 @@ public class Climber extends DashboardedSubsystem {
                     new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLIMBER_BACK_SOLENOID_FORWARD,
                             RobotMap.PCM.CLIMBER_BACK_SOLENOID_REVERSE)
             );
+        }
         return instance;
     }
 
-    private Climber(String name, DoubleSolenoid frontSolenoid1, DoubleSolenoid frontSolenoid2, DoubleSolenoid backSolenoid) {
-        super(name);
+    private Climber(String namespaceName, DoubleSolenoid frontSolenoid1, DoubleSolenoid frontSolenoid2, DoubleSolenoid backSolenoid) {
+        super(namespaceName);
         this.frontSolenoid1 = frontSolenoid1;
         this.frontSolenoid2 = frontSolenoid2;
         this.backSolenoid = backSolenoid;
     }
 
-    public InstantCommand frontSolenoidsOn() {
+    public InstantCommand openFrontSolenoids() {
         return new InstantCommand(() ->
         {
             frontSolenoid1.set(DoubleSolenoid.Value.kForward);
@@ -45,7 +46,7 @@ public class Climber extends DashboardedSubsystem {
         });
     }
 
-    public InstantCommand frontSolenoidsOff() {
+    public InstantCommand closeFrontSolenoids() {
         return new InstantCommand(() ->
         {
             frontSolenoid1.set(DoubleSolenoid.Value.kReverse);
@@ -53,20 +54,20 @@ public class Climber extends DashboardedSubsystem {
         });
     }
 
-    public InstantCommand backSolenoidOn() {
+    public InstantCommand openBackSolenoids() {
         return new InstantCommand(() -> backSolenoid.set(DoubleSolenoid.Value.kForward));
     }
 
-    public InstantCommand backSolenoidOff() {
+    public InstantCommand closeBackSolenoids() {
         return new InstantCommand(() -> backSolenoid.set(DoubleSolenoid.Value.kReverse));
     }
 
     @Override
     public void configureDashboard() {
-        namespace.putData("front solenoids forward", frontSolenoidsOn());
-        namespace.putData("front solenoids reverse", frontSolenoidsOff());
-        namespace.putData("back solenoids forward", backSolenoidOn());
-        namespace.putData("back solenoids reverse", backSolenoidOff());
+        namespace.putData("front solenoids forward", openFrontSolenoids());
+        namespace.putData("front solenoids reverse", closeFrontSolenoids());
+        namespace.putData("back solenoids forward", openBackSolenoids());
+        namespace.putData("back solenoids reverse", closeBackSolenoids());
         namespace.putString("front solenoid 1 value", frontSolenoid1.get()::toString);
         namespace.putString("front solenoid 2 value", frontSolenoid2.get()::toString);
         namespace.putString("back solenoid 1 value", backSolenoid.get()::toString);
