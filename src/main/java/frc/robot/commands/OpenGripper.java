@@ -5,14 +5,15 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Gripper;
 
 /**
- * Closes the claw to pick cubes.
+ * Opens the gripper to drop cubes.
  *
  * @see Gripper
  */
-public class PickCube extends InstantCommand {
 
-    public PickCube(Gripper gripper) {
+public class OpenGripper extends InstantCommand {
+
+    public OpenGripper(Gripper gripper) {
         addRequirements((Subsystem) gripper);
-        gripper.closeSolenoid();
+        gripper.openSolenoid();
     }
 }

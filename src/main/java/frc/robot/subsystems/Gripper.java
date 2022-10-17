@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
 
 /**
- * Controls the claw that is responsible for holding cubes.
+ * Controls the gripper that is responsible for holding cubes.
  */
 public class Gripper extends DashboardedSubsystem {
 
