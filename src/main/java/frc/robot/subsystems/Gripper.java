@@ -17,8 +17,8 @@ public class Gripper extends DashboardedSubsystem {
 
     public static Gripper getInstance() {
         if (instance == null) {
-            instance = new Gripper("gripper", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.CLAW_SOLENOID_FORWARD,
-                    RobotMap.PCM.CLAW_SOLENOID_REVERSE));
+            instance = new Gripper("gripper", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.GRIPPER_SOLENOID_FORWARD,
+                    RobotMap.PCM.GRIPPER_SOLENOID_REVERSE));
         }
         return instance;
     }
