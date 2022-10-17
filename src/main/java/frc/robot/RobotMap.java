@@ -24,24 +24,6 @@ public class RobotMap {
         int CLIMBER_BACK_SOLENOID_REVERSE = -1;
     }
 
-    public interface PCM {
-        int CLIMBER_FRONT_SOLENOID_1_FORWARD = -1;
-        int CLIMBER_FRONT_SOLENOID_1_REVERSE = -1;
-        int CLIMBER_FRONT_SOLENOID_2_FORWARD = -1;
-        int CLIMBER_FRONT_SOLENOID_2_REVERSE = -1;
-        int CLIMBER_BACK_SOLENOID_FORWARD = -1;
-        int CLIMBER_BACK_SOLENOID_REVERSE = -1;
-    }
-
-    public interface PCM {
-        int CLIMBER_FRONT_SOLENOID_1_FORWARD = -1;
-        int CLIMBER_FRONT_SOLENOID_1_REVERSE = -1;
-        int CLIMBER_FRONT_SOLENOID_2_FORWARD = -1;
-        int CLIMBER_FRONT_SOLENOID_2_REVERSE = -1;
-        int CLIMBER_BACK_SOLENOID_FORWARD = -1;
-        int CLIMBER_BACK_SOLENOID_REVERSE = -1;
-    }
-
     public interface DIO {
 
     }
