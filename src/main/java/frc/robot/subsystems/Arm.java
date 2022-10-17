@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class Arm extends MotoredGenericSubsystem {
 
+    enum State {
+        RESTING, PICKING, PLACING_ZERO, PLACING_ONE, PLACING_TWO;
+    }
+
     private static Arm lowerInstance;
     private static Arm upperInstance;
 
