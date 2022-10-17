@@ -20,15 +20,18 @@ public class Arm extends MotoredGenericSubsystem {
 
     public static Arm getLowerInstance() {
         if (lowerInstance == null) {
-            lowerInstance = new Arm("lower arm", new CANSparkMax(RobotMap.CAN.ARM_LOWER_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    new CANSparkMax(RobotMap.CAN.ARM_LOWER_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless));
+            lowerInstance = new Arm("lower shaft",
+                    new CANSparkMax(RobotMap.CAN.ARM_LOWER_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
+                    new CANSparkMax(RobotMap.CAN.ARM_LOWER_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless)
+            );
         }
         return lowerInstance;
     }
 
     public static Arm getUpperInstance() {
         if (upperInstance == null) {
-            upperInstance = new Arm("upper arm", new CANSparkMax(RobotMap.CAN.ARM_UPPER_SPARKMAX, CANSparkMaxLowLevel.MotorType.kBrushless));
+            upperInstance = new Arm("upper shaft", new CANSparkMax(RobotMap.CAN.ARM_UPPER_SPARKMAX,
+                    CANSparkMaxLowLevel.MotorType.kBrushless));
         }
         return upperInstance;
     }
