@@ -106,6 +106,8 @@ public class Drivetrain extends TankDrivetrain {
         return rightEncoder.getPosition();
     }
 
+    public PIDSettings getCameraPIDSettings() { return pidSettingsCamera; }
+
     @Override
     public void configureDashboard() {
         namespace.putData("reset pigeon", new InstantCommand(this::resetPigeon) {
