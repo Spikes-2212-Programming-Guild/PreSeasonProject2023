@@ -38,7 +38,7 @@ public class Climber extends DashboardedSubsystem {
         this.backSolenoid = backSolenoid;
     }
 
-    public InstantCommand openFrontSolenoids() {
+    public InstantCommand openFrontSolenoid() {
         return new InstantCommand(() ->
         {
             frontSolenoid1.set(DoubleSolenoid.Value.kForward);
@@ -46,7 +46,7 @@ public class Climber extends DashboardedSubsystem {
         });
     }
 
-    public InstantCommand closeFrontSolenoids() {
+    public InstantCommand closeFrontSolenoid() {
         return new InstantCommand(() ->
         {
             frontSolenoid1.set(DoubleSolenoid.Value.kReverse);
@@ -54,20 +54,20 @@ public class Climber extends DashboardedSubsystem {
         });
     }
 
-    public InstantCommand openBackSolenoids() {
+    public InstantCommand openBackSolenoid() {
         return new InstantCommand(() -> backSolenoid.set(DoubleSolenoid.Value.kForward));
     }
 
-    public InstantCommand closeBackSolenoids() {
+    public InstantCommand closeBackSolenoid() {
         return new InstantCommand(() -> backSolenoid.set(DoubleSolenoid.Value.kReverse));
     }
 
     @Override
     public void configureDashboard() {
-        namespace.putData("front solenoids forward", openFrontSolenoids());
-        namespace.putData("front solenoids reverse", closeFrontSolenoids());
-        namespace.putData("back solenoids forward", openBackSolenoids());
-        namespace.putData("back solenoids reverse", closeBackSolenoids());
+        namespace.putData("front solenoid forward", openFrontSolenoid());
+        namespace.putData("front solenoid reverse", closeFrontSolenoid());
+        namespace.putData("back solenoid forward", openBackSolenoid());
+        namespace.putData("back solenoid reverse", closeBackSolenoid());
         namespace.putString("front solenoid 1 value", frontSolenoid1.get()::toString);
         namespace.putString("front solenoid 2 value", frontSolenoid2.get()::toString);
         namespace.putString("back solenoid 1 value", backSolenoid.get()::toString);

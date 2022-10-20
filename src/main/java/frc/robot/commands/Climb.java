@@ -16,41 +16,48 @@ public class Climb extends SequentialCommandGroup {
 
     private static final RootNamespace namespace = new RootNamespace("climb command");
 
-    private static final Supplier<Double> OPEN_FRONT_SOLENOID_ULTRASONIC_DISTANCE =
-            namespace.addConstantDouble("open front solenoid ultrasonic distance", 50);
-
-    private static final Supplier<Double> OPEN_BACK_SOLENOID_ULTRASONIC_DISTANCE =
-            namespace.addConstantDouble("open back solenoid ultrasonic distance", 30);
-
-    private static final Supplier<Double> CLOSE_BACK_SOLENOID_ULTRASONIC_DISTANCE =
-            namespace.addConstantDouble("close back solenoid ultrasonic distance", 15);
-
+    /**
+     * The distance from the deck in which the {@link Climber} front solenoid needs to open.
+     */
+    private static final Supplier<Double> OPEN_FRONT_SOLENOID_ULTRASONIC_IN_CM =
+            namespace.addConstantDouble("open front solenoid ultrasonic in cm", 50);
+    /**
+     * The distance from the deck in which the {@link Climber} back solenoid needs to open.
+     */
+    private static final Supplier<Double> OPEN_BACK_SOLENOID_ULTRASONIC_IN_CM =
+            namespace.addConstantDouble("open back solenoid ultrasonic in cm", 30);
+    /**
+     * The distance from the deck in which the {@link Climber} back solenoid needs to close.
+     */
+    private static final Supplier<Double> CLOSE_BACK_SOLENOID_ULTRASONIC_IN_CM =
+            namespace.addConstantDouble("close back solenoid ultrasonic in cm", 15);
+    /**
+     * The amount of centimeters that the robot is allowed to miss the target range by.
+     */
     private static final Supplier<Double> ULTRASONIC_TOLERANCE =
             namespace.addConstantDouble("ultrasonic tolerance", 3);
 
-    public Climb() {
-        Drivetrain drivetrain = Drivetrain.getInstance();
-        Climber climber = Climber.getInstance();
+    public Climb(Drivetrain drivetrain, Climber climber) {
         addCommands(
-                backAwayFromHab(drivetrain),
+                backAwayFromDeck(drivetrain),
                 openFrontSolenoid(climber),
-                driveForward(drivetrain, OPEN_BACK_SOLENOID_ULTRASONIC_DISTANCE),
+                driveForward(drivetrain, OPEN_BACK_SOLENOID_ULTRASONIC_IN_CM),
                 openBackSolenoid(climber),
                 closeFrontSolenoid(climber),
-                driveForward(drivetrain, CLOSE_BACK_SOLENOID_ULTRASONIC_DISTANCE),
+                driveForward(drivetrain, CLOSE_BACK_SOLENOID_ULTRASONIC_IN_CM),
                 closeBackSolenoid(climber)
         );
     }
 
-    private ParallelRaceGroup backAwayFromHab(Drivetrain drivetrain) {
+    private ParallelRaceGroup backAwayFromDeck(Drivetrain drivetrain) {
         return new DriveArcade(drivetrain, -DRIVE_SPEED, 0).withInterrupt(
-                () -> Math.abs(OPEN_FRONT_SOLENOID_ULTRASONIC_DISTANCE.get() - drivetrain.getUltrasonicDistanceInCM())
+                () -> Math.abs(OPEN_FRONT_SOLENOID_ULTRASONIC_IN_CM.get() - drivetrain.getUltrasonicDistanceInCM())
                         <= ULTRASONIC_TOLERANCE.get()
         );
     }
 
     private InstantCommand openFrontSolenoid(Climber climber) {
-        return climber.openFrontSolenoids();
+        return climber.openFrontSolenoid();
     }
 
     private ParallelRaceGroup driveForward(Drivetrain drivetrain, Supplier<Double> distanceFromHab) {
@@ -61,14 +68,14 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private InstantCommand openBackSolenoid(Climber climber) {
-        return climber.openBackSolenoids();
+        return climber.openBackSolenoid();
     }
 
     private InstantCommand closeFrontSolenoid(Climber climber) {
-        return climber.closeFrontSolenoids();
+        return climber.closeFrontSolenoid();
     }
 
     private InstantCommand closeBackSolenoid(Climber climber) {
-        return climber.closeBackSolenoids();
+        return climber.closeBackSolenoid();
     }
 }
