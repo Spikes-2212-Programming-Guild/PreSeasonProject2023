@@ -5,7 +5,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
 public class CenterOnTable extends DriveArcadeWithPID {
+
     public CenterOnTable(Drivetrain drivetrain, Vision vision) {
-        super(drivetrain, vision::limelightYaw, 0, 0, drivetrain.getCameraPIDSettings());
+        super(drivetrain, vision::getLimelightYaw, 0, 0, drivetrain.getCameraPIDSettings());
     }
 }

@@ -7,9 +7,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends DashboardedSubsystem {
 
+    private static Vision instance;
+
     private final PhotonCamera photonCamera;
     private final Limelight limelight;
-    private static Vision instance;
 
     public static Vision getInstance() {
         if (instance == null) {
@@ -17,13 +18,14 @@ public class Vision extends DashboardedSubsystem {
         }
         return instance;
     }
+
     public Vision() {
-        super("photonvision");
+        super("vision");
         photonCamera = new PhotonCamera("photonvision");
         limelight = new Limelight();
     }
 
-    public double photonvisionYaw() {
+    public double getPhotonVisionYaw() {
         PhotonPipelineResult result = photonCamera.getLatestResult();
         if (result.hasTargets()) {
             return result.getBestTarget().getYaw();
@@ -35,12 +37,13 @@ public class Vision extends DashboardedSubsystem {
         photonCamera.setDriverMode(mode);
     }
 
-    public double limelightYaw(){
+    public double getLimelightYaw() {
         return limelight.getHorizontalOffsetFromTargetInDegrees();
     }
 
-
     @Override
     public void configureDashboard() {
+        namespace.putNumber("limelight yaw", this::getLimelightYaw);
+        namespace.putNumber("photon vision yaw", this::getPhotonVisionYaw);
     }
 }

@@ -7,8 +7,6 @@ import frc.robot.subsystems.Vision;
 public class CenterOnCube extends DriveArcadeWithPID {
 
     public CenterOnCube(Drivetrain drivetrain, Vision vision) {
-        super(drivetrain, vision::photonvisionYaw, 0, 0, drivetrain.getCameraPIDSettings());
+        super(drivetrain, vision::getPhotonVisionYaw, 0, 0, drivetrain.getCameraPIDSettings());
     }
-
-
 }
