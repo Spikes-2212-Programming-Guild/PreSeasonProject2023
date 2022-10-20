@@ -10,16 +10,16 @@ public class DriveToTable extends DriveTankWithPID {
 
     private static RootNamespace namespace = new RootNamespace("drive to table");
 
-    private static final Supplier<Double> LeftSource = namespace.addConstantDouble("left source", 0);
-    private static final Supplier<Double> RightSource =
+    private static final Supplier<Double> leftSource = namespace.addConstantDouble("left source", 0);
+    private static final Supplier<Double> rightSource =
             namespace.addConstantDouble("right source", 0);
-    private static final Supplier<Double> LeftSetpoint
+    private static final Supplier<Double> leftSetpoint
             = namespace.addConstantDouble("left setpoint", 0);
-    private static final Supplier<Double> RightSetpoint
+    private static final Supplier<Double> rightSetpoint
             = namespace.addConstantDouble("right setpoint", 0);
 
     public DriveToTable(Drivetrain drivetrain) {
-        super(drivetrain, drivetrain.getPIDSettingsDrive(), drivetrain.getPIDSettingsDrive(), LeftSetpoint,
-                RightSetpoint, LeftSource, RightSource);
+        super(drivetrain, drivetrain.getPIDSettingsDrive(), drivetrain.getPIDSettingsDrive(), leftSetpoint,
+                rightSetpoint, leftSource, rightSource);
     }
 }
