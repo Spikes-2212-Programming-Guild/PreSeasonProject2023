@@ -56,7 +56,7 @@ public class Drivetrain extends TankDrivetrain {
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new PigeonWrapper(RobotMap.CAN.PIGEON_TALON),
-                    new Ultrasonic(RobotMap.CAN.ULTRASONIC_CHANNEL_1, RobotMap.CAN.ULTRASONIC_CHANNEL_2)
+                    new Ultrasonic(RobotMap.AIN.ULTRASONIC_CHANNEL_1, RobotMap.AIN.ULTRASONIC_CHANNEL_2)
             );
         }
         return instance;
