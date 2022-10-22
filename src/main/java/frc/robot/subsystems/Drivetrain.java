@@ -27,7 +27,7 @@ public class Drivetrain extends TankDrivetrain {
     private final Supplier<Double> kDCamera = cameraPIDNamespace.addConstantDouble("kD", 0);
     private final Supplier<Double> toleranceCamera = cameraPIDNamespace.addConstantDouble("tolerance", 0);
     private final Supplier<Double> waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
-    private final PIDSettings pidSettingsCamera;
+    private final PIDSettings cameraPIDSettings;
 
     private final Namespace drivePIDNamespace = namespace.addChild("drive pid");
     private final Supplier<Double> kPDrive = cameraPIDNamespace.addConstantDouble("kP", 0);
@@ -65,7 +65,7 @@ public class Drivetrain extends TankDrivetrain {
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
                        CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Ultrasonic ultrasonic) {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
-        this.pidSettingsCamera = new PIDSettings(kPCamera, kICamera, kDCamera,
+        this.cameraPIDSettings = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
         this.pidSettingsDrive = new PIDSettings(kPDrive, kIDrive, kDDrive,
                 toleranceDrive, waitTimeDrive);
@@ -107,7 +107,7 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     public PIDSettings getCameraPIDSettings() {
-        return pidSettingsCamera;
+        return cameraPIDSettings;
     }
 
     @Override
