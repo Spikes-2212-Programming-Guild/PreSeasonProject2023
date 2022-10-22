@@ -17,10 +17,10 @@ public class Climb extends SequentialCommandGroup {
     private static final RootNamespace namespace = new RootNamespace("climb command");
 
     /**
-     * The distance from the deck in which the {@link Climber} front solenoid needs to open.
+     * The distance from the deck in which the {@link Climber} front solenoids need to open.
      */
-    private static final Supplier<Double> OPEN_FRONT_SOLENOID_ULTRASONIC_IN_CM =
-            namespace.addConstantDouble("open front solenoid ultrasonic in cm", 50);
+    private static final Supplier<Double> OPEN_FRONT_SOLENOIDS_ULTRASONIC_IN_CM =
+            namespace.addConstantDouble("open front solenoids ultrasonic in cm", 50);
 
     /**
      * The distance from the deck in which the {@link Climber} back solenoid needs to open.
@@ -54,7 +54,7 @@ public class Climb extends SequentialCommandGroup {
 
     private ParallelRaceGroup backAwayFromDeck(Drivetrain drivetrain) {
         return new DriveArcade(drivetrain, -DRIVE_SPEED, 0).withInterrupt(
-                () -> Math.abs(OPEN_FRONT_SOLENOID_ULTRASONIC_IN_CM.get() - drivetrain.getUltrasonicDistanceInCM())
+                () -> Math.abs(OPEN_FRONT_SOLENOIDS_ULTRASONIC_IN_CM.get() - drivetrain.getUltrasonicDistanceInCM())
                         <= ULTRASONIC_TOLERANCE.get()
         );
     }
