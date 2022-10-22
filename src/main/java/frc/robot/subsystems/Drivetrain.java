@@ -83,6 +83,10 @@ public class Drivetrain extends TankDrivetrain {
         configureDashboard();
     }
 
+    public PIDSettings getPIDSettingsDrive() {
+        return pidSettingsDrive;
+    }
+
     public double getYaw() {
         double yaw = pigeon.getYaw() % 360;
         if (yaw > 180) yaw -= 360;
