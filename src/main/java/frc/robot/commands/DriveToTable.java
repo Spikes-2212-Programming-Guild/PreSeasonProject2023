@@ -18,6 +18,7 @@ public class DriveToTable extends SequentialCommandGroup {
     private final Drivetrain drivetrain;
 
     public DriveToTable(Drivetrain drivetrain, Vision vision) {
+        addRequirements(drivetrain);
         addCommands(driveTankWithPID(drivetrain), new CenterOnTable(drivetrain, vision));
         this.drivetrain = drivetrain;
     }
