@@ -13,9 +13,6 @@ public class RobotMap {
         int ARM_LOWER_SPARKMAX_1 = -1;
         int ARM_LOWER_SPARKMAX_2 = -1;
         int ARM_UPPER_SPARKMAX = -1;
-
-        int ULTRASONIC_CHANNEL_1 = -1;
-        int ULTRASONIC_CHANNEL_2 = -1;
     }
 
     public interface DIO {
@@ -28,5 +25,7 @@ public class RobotMap {
 
     public interface AIN {
 
+        int ULTRASONIC_CHANNEL_1 = -1;
+        int ULTRASONIC_CHANNEL_2 = -1;
     }
 }
