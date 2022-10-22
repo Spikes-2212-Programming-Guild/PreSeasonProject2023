@@ -106,7 +106,9 @@ public class Drivetrain extends TankDrivetrain {
         return rightEncoder.getPosition();
     }
 
-    public PIDSettings getCameraPIDSettings() { return pidSettingsCamera; }
+    public PIDSettings getCameraPIDSettings() {
+        return pidSettingsCamera;
+    }
 
     @Override
     public void configureDashboard() {

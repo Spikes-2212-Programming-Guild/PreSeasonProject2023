@@ -14,15 +14,15 @@ public class Vision extends DashboardedSubsystem {
 
     public static Vision getInstance() {
         if (instance == null) {
-            instance = new Vision();
+            instance = new Vision(new PhotonCamera("photonvision"), new Limelight());
         }
         return instance;
     }
 
-    public Vision() {
+    private Vision(PhotonCamera photonCamera, Limelight limelight) {
         super("vision");
-        photonCamera = new PhotonCamera("photonvision");
-        limelight = new Limelight();
+        this.photonCamera = photonCamera;
+        this.limelight = limelight;
     }
 
     public double getPhotonVisionYaw() {
