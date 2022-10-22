@@ -19,21 +19,21 @@ public class Climb extends SequentialCommandGroup {
     /**
      * The distance from the deck in which the {@link Climber} front solenoid needs to open.
      */
-
     private static final Supplier<Double> OPEN_FRONT_SOLENOID_ULTRASONIC_IN_CM =
             namespace.addConstantDouble("open front solenoid ultrasonic in cm", 50);
+
     /**
      * The distance from the deck in which the {@link Climber} back solenoid needs to open.
      */
-
     private static final Supplier<Double> OPEN_BACK_SOLENOID_ULTRASONIC_IN_CM =
             namespace.addConstantDouble("open back solenoid ultrasonic in cm", 30);
+
     /**
      * The distance from the deck in which the {@link Climber} back solenoid needs to close.
      */
-
     private static final Supplier<Double> CLOSE_BACK_SOLENOID_ULTRASONIC_IN_CM =
             namespace.addConstantDouble("close back solenoid ultrasonic in cm", 15);
+
     /**
      * The maximum amount of centimeters that the robot is allowed to miss the target by.
      */
