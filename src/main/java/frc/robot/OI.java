@@ -2,7 +2,7 @@ package frc.robot;
 
 import com.spikes2212.util.XboxControllerWrapper;
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.command.DriveToTable;
+import frc.robot.commands.DriveToTable;
 import frc.robot.subsystems.Drivetrain;
 
 public class OI /*GEVALD*/ {

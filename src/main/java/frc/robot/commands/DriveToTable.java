@@ -1,4 +1,4 @@
-package frc.robot.command;
+package frc.robot.commands;
 
 import com.spikes2212.command.drivetrains.commands.DriveTankWithPID;
 import com.spikes2212.dashboard.RootNamespace;
