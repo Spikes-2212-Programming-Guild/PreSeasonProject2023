@@ -26,7 +26,7 @@ public class OI /*GEVALD*/ {
     }
 
     private OI(Drivetrain drivetrain, Gripper gripper, Climber climber, Vision vision) {
-        xbox.getButtonStart().whenPressed(new DriveToTable(drivetrain));
+        xbox.getButtonStart().whenPressed(new DriveToTable(drivetrain, vision));
         xbox.getButtonBack().whenPressed(new Climb(drivetrain, climber));
         xbox.getRBButton().whenPressed(new OpenGripper(gripper));
         xbox.getLBButton().whenPressed(new CloseGripper(gripper));
