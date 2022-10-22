@@ -30,6 +30,7 @@ public class RobotMap {
 
     public interface DIO {
 
+        int GRIPPER_LIMIT = -1;
     }
 
     public interface PWM {

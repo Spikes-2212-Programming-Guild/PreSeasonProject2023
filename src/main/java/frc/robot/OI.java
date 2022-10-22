@@ -32,6 +32,7 @@ public class OI /*GEVALD*/ {
         xbox.getLBButton().whenPressed(new CloseGripper(gripper));
         xbox.getRightStickButton().whenPressed(new CenterOnCube(drivetrain, vision));
         xbox.getLeftStickButton().whenPressed(new CenterOnTable(drivetrain, vision));
+        xbox.getRTButton().whenActive(new PickUpCube(drivetrain, gripper, vision));
     }
 
     public double getLeftX() {
