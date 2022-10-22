@@ -37,7 +37,6 @@ public class Climb extends SequentialCommandGroup {
     /**
      * The maximum amount of centimeters that the robot is allowed to miss the target by.
      */
-
     private static final Supplier<Double> ULTRASONIC_TOLERANCE =
             namespace.addConstantDouble("ultrasonic tolerance", 3);
 
@@ -64,9 +63,9 @@ public class Climb extends SequentialCommandGroup {
         return climber.openFrontSolenoid();
     }
 
-    private ParallelRaceGroup driveForward(Drivetrain drivetrain, Supplier<Double> distanceFromHab) {
+    private ParallelRaceGroup driveForward(Drivetrain drivetrain, Supplier<Double> distanceFromDeck) {
         return new DriveArcade(drivetrain, DRIVE_SPEED, 0).withInterrupt(
-                () -> Math.abs(distanceFromHab.get() - drivetrain.getUltrasonicDistanceInCM()) <=
+                () -> Math.abs(distanceFromDeck.get() - drivetrain.getUltrasonicDistanceInCM()) <=
                         ULTRASONIC_TOLERANCE.get()
         );
     }
