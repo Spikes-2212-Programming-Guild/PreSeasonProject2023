@@ -1,10 +1,17 @@
 package frc.robot;
 
+import com.spikes2212.command.genericsubsystem.commands.smartmotorcontrollersubsystem.MoveSmartMotorControllerSubsystem;
+import com.spikes2212.control.FeedForwardSettings;
+import com.spikes2212.control.PIDSettings;
+import com.spikes2212.util.UnifiedControlMode;
 import com.spikes2212.util.XboxControllerWrapper;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Arm.State;
+
+import static com.spikes2212.control.FeedForwardSettings.EMPTY_FFSETTINGS;
+import static com.spikes2212.control.PIDSettings.EMPTY_PID_SETTINGS;
 
 public class OI /*GEVALD*/ {
 
@@ -40,6 +47,16 @@ public class OI /*GEVALD*/ {
         xbox.getBlueButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ZERO));
         xbox.getYellowButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ONE));
         xbox.getRedButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_TWO));
+
+        xbox.getLeftButton().whileHeld(new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS,
+                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.LOWER_SHAFT_MOVE_SPEED));
+        xbox.getRightButton().whileHeld(new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS,
+                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.LOWER_SHAFT_MOVE_SPEED));
+
+        xbox.getDownButton().whileHeld(new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS,
+                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED));
+        xbox.getUpButton().whileHeld(new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS,
+                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED));
     }
 
     public double getLeftX() {
