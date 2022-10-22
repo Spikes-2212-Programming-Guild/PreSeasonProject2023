@@ -83,10 +83,6 @@ public class Drivetrain extends TankDrivetrain {
         configureDashboard();
     }
 
-    public PIDSettings getPIDSettingsDrive() {
-        return pidSettingsDrive;
-    }
-
     public double getYaw() {
         double yaw = pigeon.getYaw() % 360;
         if (yaw > 180) yaw -= 360;
@@ -96,6 +92,11 @@ public class Drivetrain extends TankDrivetrain {
 
     public void resetPigeon() {
         pigeon.reset();
+    }
+
+    public void resetEncoders() {
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
     }
 
     public double getUltrasonicDistanceInCM() {
@@ -108,6 +109,11 @@ public class Drivetrain extends TankDrivetrain {
 
     public double getRightEncoderPosition() {
         return rightEncoder.getPosition();
+    }
+
+
+    public PIDSettings getDrivePIDSettings() {
+        return pidSettingsDrive;
     }
 
     @Override
