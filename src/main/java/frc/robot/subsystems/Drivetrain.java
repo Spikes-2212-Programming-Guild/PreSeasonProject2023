@@ -30,11 +30,11 @@ public class Drivetrain extends TankDrivetrain {
     private final PIDSettings pidSettingsCamera;
 
     private final Namespace drivePIDNamespace = namespace.addChild("drive pid");
-    private final Supplier<Double> kPDrive = cameraPIDNamespace.addConstantDouble("kP", 0);
-    private final Supplier<Double> kIDrive = cameraPIDNamespace.addConstantDouble("kI", 0);
-    private final Supplier<Double> kDDrive = cameraPIDNamespace.addConstantDouble("kD", 0);
-    private final Supplier<Double> toleranceDrive = cameraPIDNamespace.addConstantDouble("tolerance", 0);
-    private final Supplier<Double> waitTimeDrive = cameraPIDNamespace.addConstantDouble("wait time", 0);
+    private final Supplier<Double> kPDrive = drivePIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kIDrive = drivePIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDDrive = drivePIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceDrive = drivePIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeDrive = drivePIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings pidSettingsDrive;
 
     private final CANSparkMax left1;
@@ -83,15 +83,20 @@ public class Drivetrain extends TankDrivetrain {
         configureDashboard();
     }
 
+    public void resetPigeon() {
+        pigeon.reset();
+    }
+
+    public void resetEncoders() {
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
+    }
+
     public double getYaw() {
         double yaw = pigeon.getYaw() % 360;
         if (yaw > 180) yaw -= 360;
         if (yaw < -180) yaw += 360;
         return yaw;
-    }
-
-    public void resetPigeon() {
-        pigeon.reset();
     }
 
     public double getUltrasonicDistanceInCM() {
@@ -104,6 +109,10 @@ public class Drivetrain extends TankDrivetrain {
 
     public double getRightEncoderPosition() {
         return rightEncoder.getPosition();
+    }
+
+    public PIDSettings getDrivePIDSettings() {
+        return pidSettingsDrive;
     }
 
     @Override
