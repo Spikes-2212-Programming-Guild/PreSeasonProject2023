@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
-import com.spikes2212.command.genericsubsystem.MotoredGenericSubsystem;
 import com.spikes2212.command.genericsubsystem.smartmotorcontrollersubsystem.SparkMaxGenericSubsystem;
 import com.spikes2212.control.FeedForwardSettings;
 import com.spikes2212.control.PIDSettings;
@@ -11,7 +10,6 @@ import com.spikes2212.control.TrapezoidProfileSettings;
 import com.spikes2212.dashboard.Namespace;
 import frc.robot.RobotMap;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -19,19 +17,36 @@ import java.util.function.Supplier;
  */
 public class Arm extends SparkMaxGenericSubsystem {
 
-    enum State {
-        RESTING, PICKING, PLACING_ZERO, PLACING_ONE, PLACING_TWO;
+    public enum State {
+        //@TODO calculate
+        RESTING(0,0), PICKING(0,0), PLACING_ZERO(0,0), PLACING_ONE(0,0), PLACING_TWO(0,0);
+
+        private final double alpha;
+        private final double beta;
+
+        State(double alpha, double beta) {
+            this.alpha = alpha;
+            this.beta = beta;
+        }
+
+        public double getAlpha() {
+            return alpha;
+        }
+
+        public double getBeta() {
+            return beta;
+        }
     }
 
     private static Arm lowerInstance;
     private static Arm upperInstance;
 
-    private final Namespace PIDNamespace = namespace.addChild("pid");
-    private final Supplier<Double> kP = PIDNamespace.addConstantDouble("kP", 0);
-    private final Supplier<Double> kI = PIDNamespace.addConstantDouble("kI", 0);
-    private final Supplier<Double> kD = PIDNamespace.addConstantDouble("kD", 0);
-    private final Supplier<Double> tolerance = PIDNamespace.addConstantDouble("tolerance", 0);
-    private final Supplier<Double> waitTime = PIDNamespace.addConstantDouble("wait time", 0);
+    private final Namespace pidNamespace = namespace.addChild("pid");
+    private final Supplier<Double> kP = pidNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kI = pidNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kD = pidNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> tolerance = pidNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTime = pidNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings pidSettings;
 
     private final Namespace feedForwardNamespace = namespace.addChild("feed forward");
@@ -72,6 +87,18 @@ public class Arm extends SparkMaxGenericSubsystem {
         this.trapezoidProfileSettings = new TrapezoidProfileSettings(accelerationRate, maxVelocity, curve);
         this.encoder = master.getEncoder();
         configureDashboard();
+    }
+
+    public PIDSettings getPIDSettings() {
+        return pidSettings;
+    }
+
+    public FeedForwardSettings getFeedForwardSettings() {
+        return feedForwardSettings;
+    }
+
+    public TrapezoidProfileSettings getTrapezoidProfileSettings() {
+        return trapezoidProfileSettings;
     }
 
     public double getEncoderPosition() {
