@@ -3,10 +3,8 @@ package frc.robot;
 import com.spikes2212.util.XboxControllerWrapper;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.*;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Gripper;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.Arm.State;
 
 public class OI /*GEVALD*/ {
 
@@ -20,19 +18,28 @@ public class OI /*GEVALD*/ {
     public static OI getInstance() {
         if (instance == null) {
             instance = new OI(Drivetrain.getInstance(), Gripper.getInstance(),
-                    Climber.getInstance(), Vision.getInstance());
+                    Climber.getInstance(), Vision.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance());
         }
         return instance;
     }
 
-    private OI(Drivetrain drivetrain, Gripper gripper, Climber climber, Vision vision) {
+    private OI(Drivetrain drivetrain, Gripper gripper, Climber climber, Vision vision, Arm lowerShaft, Arm upperShaft) {
         xbox.getButtonStart().whenPressed(new DriveToTable(drivetrain, vision));
         xbox.getButtonBack().whenPressed(new Climb(drivetrain, climber));
-        xbox.getRBButton().whenPressed(new OpenGripper(gripper));
+
         xbox.getLBButton().whenPressed(new CloseGripper(gripper));
+        xbox.getRBButton().whenPressed(new OpenGripper(gripper));
+
         xbox.getRightStickButton().whenPressed(new CenterOnCube(drivetrain, vision));
         xbox.getLeftStickButton().whenPressed(new CenterOnTable(drivetrain, vision));
+
+        xbox.getLTButton().whenActive(new MoveArm(lowerShaft, upperShaft, State.RESTING));
         xbox.getRTButton().whenActive(new PickUpCube(drivetrain, gripper, vision));
+
+        xbox.getGreenButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PICKING));
+        xbox.getBlueButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ZERO));
+        xbox.getYellowButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ONE));
+        xbox.getRedButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_TWO));
     }
 
     public double getLeftX() {
