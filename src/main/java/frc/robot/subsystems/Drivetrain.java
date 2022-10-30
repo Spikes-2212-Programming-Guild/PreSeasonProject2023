@@ -29,12 +29,20 @@ public class Drivetrain extends TankDrivetrain {
     private final PIDSettings cameraPIDSettings;
 
     private final Namespace zoomToTablePIDNamespace = namespace.addChild("zoom to table pid");
-    private final Supplier<Double> kPDrive = zoomToTablePIDNamespace.addConstantDouble("kP", 0);
-    private final Supplier<Double> kIDrive = zoomToTablePIDNamespace.addConstantDouble("kI", 0);
-    private final Supplier<Double> kDDrive = zoomToTablePIDNamespace.addConstantDouble("kD", 0);
-    private final Supplier<Double> toleranceDrive = zoomToTablePIDNamespace.addConstantDouble("tolerance", 0);
-    private final Supplier<Double> waitTimeDrive = zoomToTablePIDNamespace.addConstantDouble("wait time", 0);
+    private final Supplier<Double> kPZoom = zoomToTablePIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kIZoom = zoomToTablePIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDZoom = zoomToTablePIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceZoom = zoomToTablePIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeZoom = zoomToTablePIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings zoomToTablePIDSettings;
+
+    private final Namespace shortDrivePIDNamespace = namespace.addChild("zoom to table pid");
+    private final Supplier<Double> kPShortDrive = shortDrivePIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kIShortDrive = shortDrivePIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDShortDrive = shortDrivePIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceShortDrive = shortDrivePIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeShortDrive = shortDrivePIDNamespace.addConstantDouble("wait time", 0);
+    private final PIDSettings shortDrivePIDSettings;
 
     private final CANSparkMax left1;
     private final CANSparkMax left2;
@@ -53,20 +61,21 @@ public class Drivetrain extends TankDrivetrain {
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    new PigeonWrapper(RobotMap.CAN.PIGEON_TALON),
-                    new Ultrasonic(RobotMap.AIN.ULTRASONIC_CHANNEL_1, RobotMap.AIN.ULTRASONIC_CHANNEL_2)
+                    new PigeonWrapper(RobotMap.CAN.PIGEON_TALON)
             );
         }
         return instance;
     }
 
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
-                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Ultrasonic ultrasonic) {
+                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon) {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
         this.cameraPIDSettings = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
-        this.zoomToTablePIDSettings = new PIDSettings(kPDrive, kIDrive, kDDrive,
-                toleranceDrive, waitTimeDrive);
+        this.zoomToTablePIDSettings = new PIDSettings(kPZoom, kIZoom, kDZoom,
+                toleranceZoom, waitTimeZoom);
+        this.shortDrivePIDSettings = new PIDSettings(kPShortDrive, kIShortDrive, kDShortDrive,
+                toleranceShortDrive, waitTimeShortDrive);
         this.left1 = left1;
         this.left2 = left2;
         this.right1 = right1;
@@ -95,6 +104,10 @@ public class Drivetrain extends TankDrivetrain {
         return yaw;
     }
 
+    public double getPitch() {
+        return pigeon.getPitch();
+    }
+
     public double getLeftEncoderPosition() {
         return leftEncoder.getPosition();
     }
@@ -107,12 +120,20 @@ public class Drivetrain extends TankDrivetrain {
         return pigeon.getZAxisAcceleration();
     }
 
+    public double getCurrent() {
+        return left1.getOutputCurrent();
+    }
+
     public PIDSettings getCameraPIDSettings() {
         return cameraPIDSettings;
     }
 
     public PIDSettings getZoomToTablePIDSettings() {
         return zoomToTablePIDSettings;
+    }
+
+    public PIDSettings getShortDrivePIDSettings() {
+        return shortDrivePIDSettings;
     }
 
     @Override

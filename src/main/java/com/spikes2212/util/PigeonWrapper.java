@@ -86,6 +86,11 @@ public class PigeonWrapper {
         pigeon.setYaw(yaw);
     }
 
+    public double getPitch() {
+        pigeon.getYawPitchRoll(values);
+        return values[1];
+    }
+
     public double getXAxisAcceleration() {
         pigeon.getAccelerometerAngles(values);
         return values[0];

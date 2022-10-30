@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
 import com.spikes2212.command.drivetrains.commands.DriveTankWithPID;
 import com.spikes2212.dashboard.RootNamespace;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber;
@@ -17,62 +18,59 @@ public class Climb extends SequentialCommandGroup {
     private static final RootNamespace namespace = new RootNamespace("climb command");
 
     /**
-     * The distance from the deck in which the {@link Climber} front solenoids need to open.
-     */
-    private static final Supplier<Double> OPEN_FRONT_SOLENOIDS_ULTRASONIC_IN_CM =
-            namespace.addConstantDouble("open front solenoids ultrasonic in cm", 50);
-
-    /**
      * The distance from the deck in which the {@link Climber} back solenoid needs to open.
      */
-    private static final Supplier<Double> OPEN_BACK_SOLENOID_DISTANCE_IN_CM =
-            namespace.addConstantDouble("open back solenoid distance in cm", 30);
+    private static final Supplier<Double> OPEN_BACK_SOLENOID_DISTANCE =
+            namespace.addConstantDouble("open back solenoid ultrasonic in cm", -30);
 
-    /**
-     * The distance from the deck in which the {@link Climber} back solenoid needs to close.
-     */
-    private static final Supplier<Double> CLOSE_BACK_SOLENOID_DISTANCE_IN_CM =
-            namespace.addConstantDouble("close back solenoid distance in cm", 15);
+    private static final Supplier<Double> PITCH_ANGLE =
+            namespace.addConstantDouble("pitch angle", 12);
 
-    private static final Supplier<Double> HIT_WALL_ACCELERATION =
-            namespace.addConstantDouble("hit wall acceleration", 0);
-
-    /**
-     * The maximum amount of centimeters that the robot is allowed to miss the target by.
-     */
-    private static final Supplier<Double> ULTRASONIC_TOLERANCE =
-            namespace.addConstantDouble("ultrasonic tolerance", 3);
-
-    private final Drivetrain drivetrain;
-    private final Climber climber;
+    private static final Supplier<Double> STALL_CURRENT =
+            namespace.addConstantDouble("stall current", 19);
 
     public Climb(Drivetrain drivetrain, Climber climber) {
-        this.drivetrain = drivetrain;
-        this.climber = climber;
-        addRequirements(drivetrain, climber);
         addCommands(
                 backAwayFromDeck(drivetrain),
-                climber.openFrontSolenoid(),
-                driveForward(drivetrain, OPEN_BACK_SOLENOID_ULTRASONIC_IN_CM),
-                climber.openBackSolenoid(),
-                climber.closeFrontSolenoid(),
-                driveForward(drivetrain, CLOSE_BACK_SOLENOID_ULTRASONIC_IN_CM),
-                climber.closeBackSolenoid()
+                openFrontSolenoid(climber),
+                getPartiallyOnDeck(drivetrain),
+                openBackSolenoid(climber),
+                closeFrontSolenoid(climber),
+                getFullyOnDeck(drivetrain),
+                closeBackSolenoid(climber)
         );
     }
 
-    private ParallelRaceGroup backAwayFromDeck(Drivetrain drivetrain) {
-        return new DriveTankWithPID(drivetrain, drivetrain.getZoomToTablePIDSettings(), drivetrain.getZoomToTablePIDSettings(),
-                );
+    private DriveTankWithPID backAwayFromDeck(Drivetrain drivetrain) {
+        return new DriveTankWithPID(drivetrain, drivetrain.getShortDrivePIDSettings(),
+                drivetrain.getShortDrivePIDSettings(), OPEN_BACK_SOLENOID_DISTANCE,
+                OPEN_BACK_SOLENOID_DISTANCE, drivetrain::getLeftEncoderPosition,
+                drivetrain::getRightEncoderPosition);
     }
 
-    private ParallelRaceGroup driveToDeck() {
-        return new DriveArcade(drivetrain, DRIVE_SPEED, 0).withInterrupt(this::hitDeck);
+    private InstantCommand openFrontSolenoid(Climber climber) {
+        return climber.openFrontSolenoid();
     }
 
-    private
+    private ParallelRaceGroup getPartiallyOnDeck(Drivetrain drivetrain) {
+        return new DriveArcade(drivetrain, DRIVE_SPEED, 0)
+                .withInterrupt(() -> drivetrain.getPitch() >= PITCH_ANGLE.get());
+    }
 
-    private boolean hitDeck() {
-        return drivetrain.getAccelerometerValue() < HIT_WALL_ACCELERATION.get();
+    private ParallelRaceGroup getFullyOnDeck(Drivetrain drivetrain) {
+        return new DriveArcade(drivetrain, DRIVE_SPEED, 0)
+                .withInterrupt(() -> drivetrain.getCurrent() < STALL_CURRENT.get());
+    }
+
+    private InstantCommand openBackSolenoid(Climber climber) {
+        return climber.openBackSolenoid();
+    }
+
+    private InstantCommand closeFrontSolenoid(Climber climber) {
+        return climber.closeFrontSolenoid();
+    }
+
+    private InstantCommand closeBackSolenoid(Climber climber) {
+        return climber.closeBackSolenoid();
     }
 }
