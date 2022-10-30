@@ -14,7 +14,7 @@ public class DriveToTable extends DriveTankWithPID {
     private static final Supplier<Double> rightSetpoint = namespace.addConstantDouble("right setpoint", 0);
 
     public DriveToTable(Drivetrain drivetrain) {
-        super(drivetrain, drivetrain.getDrivePIDSettings(), drivetrain.getDrivePIDSettings(), leftSetpoint,
+        super(drivetrain, drivetrain.getZoomToTablePIDSettings(), drivetrain.getZoomToTablePIDSettings(), leftSetpoint,
                 rightSetpoint, drivetrain::getLeftEncoderPosition, drivetrain::getRightEncoderPosition);
     }
 

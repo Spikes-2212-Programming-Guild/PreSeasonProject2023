@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
 
-    public static final double MILLIMETER_TO_CENTIMETER = 0.1;
     public static final double DISTANCE_PER_PULSE = -1; // @todo
 
     private static Drivetrain instance;
@@ -29,20 +28,19 @@ public class Drivetrain extends TankDrivetrain {
     private final Supplier<Double> waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings cameraPIDSettings;
 
-    private final Namespace drivePIDNamespace = namespace.addChild("drive pid");
-    private final Supplier<Double> kPDrive = drivePIDNamespace.addConstantDouble("kP", 0);
-    private final Supplier<Double> kIDrive = drivePIDNamespace.addConstantDouble("kI", 0);
-    private final Supplier<Double> kDDrive = drivePIDNamespace.addConstantDouble("kD", 0);
-    private final Supplier<Double> toleranceDrive = drivePIDNamespace.addConstantDouble("tolerance", 0);
-    private final Supplier<Double> waitTimeDrive = drivePIDNamespace.addConstantDouble("wait time", 0);
-    private final PIDSettings pidSettingsDrive;
+    private final Namespace zoomToTablePIDNamespace = namespace.addChild("zoom to table pid");
+    private final Supplier<Double> kPDrive = zoomToTablePIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kIDrive = zoomToTablePIDNamespace.addConstantDouble("kI", 0);
+    private final Supplier<Double> kDDrive = zoomToTablePIDNamespace.addConstantDouble("kD", 0);
+    private final Supplier<Double> toleranceDrive = zoomToTablePIDNamespace.addConstantDouble("tolerance", 0);
+    private final Supplier<Double> waitTimeDrive = zoomToTablePIDNamespace.addConstantDouble("wait time", 0);
+    private final PIDSettings zoomToTablePIDSettings;
 
     private final CANSparkMax left1;
     private final CANSparkMax left2;
     private final CANSparkMax right1;
     private final CANSparkMax right2;
 
-    private final Ultrasonic ultrasonic;
     private final PigeonWrapper pigeon;
 
     private final RelativeEncoder leftEncoder;
@@ -67,15 +65,13 @@ public class Drivetrain extends TankDrivetrain {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
         this.cameraPIDSettings = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
-        this.pidSettingsDrive = new PIDSettings(kPDrive, kIDrive, kDDrive,
+        this.zoomToTablePIDSettings = new PIDSettings(kPDrive, kIDrive, kDDrive,
                 toleranceDrive, waitTimeDrive);
         this.left1 = left1;
         this.left2 = left2;
         this.right1 = right1;
         this.right2 = right2;
         this.pigeon = pigeon;
-        this.ultrasonic = ultrasonic;
-        Ultrasonic.setAutomaticMode(true);
         this.leftEncoder = left1.getEncoder();
         this.rightEncoder = right1.getEncoder();
         leftEncoder.setPositionConversionFactor(DISTANCE_PER_PULSE);
@@ -99,10 +95,6 @@ public class Drivetrain extends TankDrivetrain {
         return yaw;
     }
 
-    public double getUltrasonicDistanceInCM() {
-        return ultrasonic.getRangeMM() * MILLIMETER_TO_CENTIMETER;
-    }
-
     public double getLeftEncoderPosition() {
         return leftEncoder.getPosition();
     }
@@ -111,12 +103,16 @@ public class Drivetrain extends TankDrivetrain {
         return rightEncoder.getPosition();
     }
 
+    public double getAccelerometerValue() {
+        return pigeon.getZAxisAcceleration();
+    }
+
     public PIDSettings getCameraPIDSettings() {
         return cameraPIDSettings;
     }
 
-    public PIDSettings getDrivePIDSettings() {
-        return pidSettingsDrive;
+    public PIDSettings getZoomToTablePIDSettings() {
+        return zoomToTablePIDSettings;
     }
 
     @Override
@@ -132,6 +128,5 @@ public class Drivetrain extends TankDrivetrain {
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
         namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
-        namespace.putNumber("ultrasonic distance value", this::getUltrasonicDistanceInCM);
     }
 }
