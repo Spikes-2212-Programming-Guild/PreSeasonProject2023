@@ -17,7 +17,10 @@ import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
 
-    public static final double DISTANCE_PER_PULSE = 6 * 2.54 * Math.PI * (1/11.161);
+    public static final double WHEEL_DIAMETER_IN_INCHES = 6;
+    public static final double INCHES_TO_CM = 2.54;
+    public static final double GEAR_RATIO = 1 / 11.161;
+    public static final double DISTANCE_PER_PULSE = WHEEL_DIAMETER_IN_INCHES * INCHES_TO_CM * GEAR_RATIO * Math.PI;
 
     private static Drivetrain instance;
 
