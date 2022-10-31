@@ -7,6 +7,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends DashboardedSubsystem {
 
+    private static final String PHOTONVISION_CAMERA_NAME = "photonvision";
     private static Vision instance;
 
     private final PhotonCamera photonCamera;
@@ -14,7 +15,7 @@ public class Vision extends DashboardedSubsystem {
 
     public static Vision getInstance() {
         if (instance == null) {
-            instance = new Vision(new PhotonCamera("photonvision"), new Limelight());
+            instance = new Vision(new PhotonCamera(PHOTONVISION_CAMERA_NAME), new Limelight());
         }
         return instance;
     }
