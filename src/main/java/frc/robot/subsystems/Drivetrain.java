@@ -7,7 +7,6 @@ import com.spikes2212.command.drivetrains.TankDrivetrain;
 import com.spikes2212.control.PIDSettings;
 import com.spikes2212.dashboard.Namespace;
 import com.spikes2212.util.PigeonWrapper;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
@@ -116,7 +115,7 @@ public class Drivetrain extends TankDrivetrain {
         return rightEncoder.getPosition();
     }
 
-    public double getAccelerometerValue() {
+    public double getPitchAceleration() {
         return pigeon.getZAxisAcceleration();
     }
 
