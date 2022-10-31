@@ -144,8 +144,8 @@ public class DriveTankWithPID extends CommandBase {
 
     @Override
     public void execute() {
-        leftPIDController.setSetpoint(rightSetpoint.get());
-        rightPIDController.setSetpoint(leftSetpoint.get());
+        leftPIDController.setSetpoint(leftSetpoint.get());
+        rightPIDController.setSetpoint(rightSetpoint.get());
         leftPIDController.setTolerance(leftPIDSettings.getTolerance());
         rightPIDController.setTolerance(rightPIDSettings.getTolerance());
         leftPIDController.setPID(leftPIDSettings.getkP(), leftPIDSettings.getkI(), leftPIDSettings.getkD());
@@ -177,5 +177,13 @@ public class DriveTankWithPID extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drivetrain.stop();
+    }
+
+    public double getActiveLeftKP() {
+        return leftPIDController.getP();
+    }
+
+    public double getActiveRightKP() {
+        return rightPIDController.getP();
     }
 }
