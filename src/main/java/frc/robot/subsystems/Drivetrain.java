@@ -15,7 +15,10 @@ import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
 
-    public static final double DISTANCE_PER_PULSE = -1; // @todo
+    public static final double WHEEL_DIAMETER_IN_INCHES = 6;
+    public static final double INCHES_TO_CM = 2.54;
+    public static final double GEAR_RATIO = 1 / 11.161;
+    public static final double DISTANCE_PER_PULSE = WHEEL_DIAMETER_IN_INCHES * INCHES_TO_CM * GEAR_RATIO * Math.PI;
 
     private static Drivetrain instance;
 
@@ -112,7 +115,7 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     public double getRightEncoderPosition() {
-        return rightEncoder.getPosition();
+        return -rightEncoder.getPosition();
     }
 
     public double getPitchRate() {
@@ -137,7 +140,10 @@ public class Drivetrain extends TankDrivetrain {
 
     @Override
     public void configureDashboard() {
-        namespace.putData("reset pigeon", new InstantCommand(this::resetPigeon) {
+        namespace.putData("reset", new InstantCommand(() -> {
+            resetEncoders();
+            resetPigeon();
+        }) {
             @Override
             public boolean runsWhenDisabled() {
                 return true;

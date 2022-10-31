@@ -17,7 +17,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         drivetrain = Drivetrain.getInstance();
-        oi = new OI();
+        oi = OI.getInstance();
     }
 
     @Override
