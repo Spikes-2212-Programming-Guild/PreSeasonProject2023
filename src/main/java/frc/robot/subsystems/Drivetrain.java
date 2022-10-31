@@ -11,13 +11,16 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
+import frc.robot.commands.DriveToTable;
 
 import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
 
-    public static final double MILLIMETER_TO_CENTIMETER = 0.1;
-    public static final double DISTANCE_PER_PULSE = -1; // @todo
+    public static final double WHEEL_DIAMETER_IN_INCHES = 6;
+    public static final double INCHES_TO_CM = 2.54;
+    public static final double GEAR_RATIO = 1 / 11.161;
+    public static final double DISTANCE_PER_PULSE = WHEEL_DIAMETER_IN_INCHES * INCHES_TO_CM * GEAR_RATIO * Math.PI;
 
     private static Drivetrain instance;
 
@@ -42,7 +45,6 @@ public class Drivetrain extends TankDrivetrain {
     private final CANSparkMax right1;
     private final CANSparkMax right2;
 
-    private final Ultrasonic ultrasonic;
     private final PigeonWrapper pigeon;
 
     private final RelativeEncoder leftEncoder;
@@ -55,15 +57,14 @@ public class Drivetrain extends TankDrivetrain {
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    new PigeonWrapper(RobotMap.CAN.PIGEON_TALON),
-                    new Ultrasonic(RobotMap.AIN.ULTRASONIC_CHANNEL_1, RobotMap.AIN.ULTRASONIC_CHANNEL_2)
+                    new PigeonWrapper(RobotMap.CAN.PIGEON_TALON)
             );
         }
         return instance;
     }
 
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
-                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Ultrasonic ultrasonic) {
+                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon) {
         super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
         this.cameraPIDSettings = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
@@ -74,8 +75,6 @@ public class Drivetrain extends TankDrivetrain {
         this.right1 = right1;
         this.right2 = right2;
         this.pigeon = pigeon;
-        this.ultrasonic = ultrasonic;
-        Ultrasonic.setAutomaticMode(true);
         this.leftEncoder = left1.getEncoder();
         this.rightEncoder = right1.getEncoder();
         leftEncoder.setPositionConversionFactor(DISTANCE_PER_PULSE);
@@ -100,7 +99,7 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     public double getUltrasonicDistanceInCM() {
-        return ultrasonic.getRangeMM() * MILLIMETER_TO_CENTIMETER;
+        return 0;
     }
 
     public double getLeftEncoderPosition() {
@@ -108,7 +107,7 @@ public class Drivetrain extends TankDrivetrain {
     }
 
     public double getRightEncoderPosition() {
-        return rightEncoder.getPosition();
+        return -rightEncoder.getPosition();
     }
 
     public PIDSettings getCameraPIDSettings() {
@@ -121,7 +120,10 @@ public class Drivetrain extends TankDrivetrain {
 
     @Override
     public void configureDashboard() {
-        namespace.putData("reset pigeon", new InstantCommand(this::resetPigeon) {
+        namespace.putData("reset", new InstantCommand(() -> {
+            resetEncoders();
+            resetPigeon();
+        }) {
             @Override
             public boolean runsWhenDisabled() {
                 return true;
@@ -133,5 +135,6 @@ public class Drivetrain extends TankDrivetrain {
         namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
         namespace.putNumber("ultrasonic distance value", this::getUltrasonicDistanceInCM);
+        namespace.putData("drive to table", new DriveToTable(this, Vision.getInstance()));
     }
 }
