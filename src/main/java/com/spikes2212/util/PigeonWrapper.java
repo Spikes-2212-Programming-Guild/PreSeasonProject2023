@@ -105,4 +105,9 @@ public class PigeonWrapper {
         pigeon.getAccelerometerAngles(values);
         return values[2];
     }
+
+    public double getPitchRate() {
+        pigeon.getRawGyro(values);
+        return values[2];
+    }
 }

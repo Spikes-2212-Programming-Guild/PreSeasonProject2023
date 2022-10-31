@@ -115,8 +115,8 @@ public class Drivetrain extends TankDrivetrain {
         return rightEncoder.getPosition();
     }
 
-    public double getPitchAceleration() {
-        return pigeon.getZAxisAcceleration();
+    public double getPitchRate() {
+        return pigeon.getPitchRate();
     }
 
     public double getCurrent() {
