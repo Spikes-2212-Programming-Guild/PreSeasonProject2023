@@ -23,6 +23,7 @@ public class Vision extends DashboardedSubsystem {
         super("vision");
         this.photonCamera = photonCamera;
         this.limelight = limelight;
+        this.configureDashboard();
     }
 
     public double getPhotonVisionYaw() {
@@ -41,8 +42,13 @@ public class Vision extends DashboardedSubsystem {
         return limelight.getHorizontalOffsetFromTargetInDegrees();
     }
 
+    public boolean limelightHasTarget() {
+        return limelight.isOnTarget();
+    }
+
     @Override
     public void configureDashboard() {
+        namespace.putBoolean("limelight has target", this::limelightHasTarget);
         namespace.putNumber("limelight yaw", this::getLimelightYaw);
         namespace.putNumber("photon vision yaw", this::getPhotonVisionYaw);
     }
