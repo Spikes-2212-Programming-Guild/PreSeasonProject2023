@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotMap;
+import frc.robot.commands.Climb;
 
 /**
  * Controls the three {@link DoubleSolenoid}s that make the robot climb.
@@ -64,5 +65,6 @@ public class Climber extends DashboardedSubsystem {
         namespace.putData("back solenoid reverse", closeBackSolenoid());
         namespace.putString("front solenoid 1 value", frontSolenoid.get()::toString);
         namespace.putString("back solenoid 1 value", backSolenoid.get()::toString);
+        namespace.putData("climb", new Climb(Drivetrain.getInstance(), this));
     }
 }
