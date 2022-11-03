@@ -1,8 +1,6 @@
 package frc.robot;
 
 import com.spikes2212.command.genericsubsystem.commands.smartmotorcontrollersubsystem.MoveSmartMotorControllerSubsystem;
-import com.spikes2212.control.FeedForwardSettings;
-import com.spikes2212.control.PIDSettings;
 import com.spikes2212.util.UnifiedControlMode;
 import com.spikes2212.util.XboxControllerWrapper;
 import edu.wpi.first.wpilibj.Joystick;
@@ -24,8 +22,9 @@ public class OI /*GEVALD*/ {
 
     public static OI getInstance() {
         if (instance == null) {
-            instance = new OI(Drivetrain.getInstance(), Gripper.getInstance(),
-                    Climber.getInstance(), Vision.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance());
+//            instance = new OI(Drivetrain.getInstance(), Gripper.getInstance(),
+//                    Climber.getInstance(), Vision.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance());
+            instance = new OI(Climber.getInstance());
         }
         return instance;
     }
@@ -57,6 +56,13 @@ public class OI /*GEVALD*/ {
                 EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED));
         xbox.getUpButton().whileHeld(new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS,
                 EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED));
+    }
+
+    private OI(Climber climber) {
+        xbox.getGreenButton().whenPressed(climber.openBackSolenoid());
+        xbox.getRedButton().whenPressed(climber.closeBackSolenoid());
+        xbox.getBlueButton().whenPressed(climber.openFrontSolenoid());
+        xbox.getYellowButton().whenPressed(climber.closeFrontSolenoid());
     }
 
     public double getLeftX() {

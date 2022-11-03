@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
@@ -38,7 +39,7 @@ public class Drivetrain extends TankDrivetrain {
     private final Supplier<Double> waitTimeZoom = zoomToTablePIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings zoomToTablePIDSettings;
 
-    private final Namespace shortDrivePIDNamespace = namespace.addChild("zoom to table pid");
+    private final Namespace shortDrivePIDNamespace = namespace.addChild("short drive pid");
     private final Supplier<Double> kPShortDrive = shortDrivePIDNamespace.addConstantDouble("kP", 0);
     private final Supplier<Double> kIShortDrive = shortDrivePIDNamespace.addConstantDouble("kI", 0);
     private final Supplier<Double> kDShortDrive = shortDrivePIDNamespace.addConstantDouble("kD", 0);
@@ -63,7 +64,7 @@ public class Drivetrain extends TankDrivetrain {
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    new PigeonWrapper(RobotMap.CAN.PIGEON_TALON)
+                    new PigeonWrapper(new TalonSRX(RobotMap.CAN.PIGEON_TALON))
             );
         }
         return instance;
@@ -118,6 +119,14 @@ public class Drivetrain extends TankDrivetrain {
         return -rightEncoder.getPosition();
     }
 
+    public double getYawRate() {
+        return pigeon.getYawRate();
+    }
+
+    public double getRollRate() {
+        return pigeon.getRollRate();
+    }
+
     public double getPitchRate() {
         return pigeon.getPitchRate();
     }
@@ -149,10 +158,15 @@ public class Drivetrain extends TankDrivetrain {
                 return true;
             }
         });
-        namespace.putNumber("pigeon yaw", this::getYaw);
+        namespace.putNumber("pigeon yaw", pigeon::getYaw);
         namespace.putNumber("left neo 1 encoder value", this::getLeftEncoderPosition);
         namespace.putNumber("left neo 2 encoder value", left2.getEncoder()::getPosition);
         namespace.putNumber("right neo 1 encoder value", this::getRightEncoderPosition);
         namespace.putNumber("right neo 2 encoder value", right2.getEncoder()::getPosition);
+        namespace.putNumber("pitch", pigeon::getPitch);
+        namespace.putNumber("roll", pigeon::getRoll);
+        namespace.putNumber("yaw rate", pigeon::getYawRate);
+        namespace.putNumber("pitch rate", pigeon::getPitchRate);
+        namespace.putNumber("roll rate", pigeon::getRollRate);
     }
 }

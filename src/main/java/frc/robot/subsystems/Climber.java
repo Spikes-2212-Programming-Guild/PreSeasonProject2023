@@ -33,20 +33,15 @@ public class Climber extends DashboardedSubsystem {
         super(namespaceName);
         this.frontSolenoid = frontSolenoid;
         this.backSolenoid = backSolenoid;
+        configureDashboard();
     }
 
     public InstantCommand openFrontSolenoid() {
-        return new InstantCommand(() ->
-        {
-            frontSolenoid.set(DoubleSolenoid.Value.kForward);
-        });
+        return new InstantCommand(() -> frontSolenoid.set(DoubleSolenoid.Value.kForward));
     }
 
     public InstantCommand closeFrontSolenoid() {
-        return new InstantCommand(() ->
-        {
-            frontSolenoid.set(DoubleSolenoid.Value.kReverse);
-        });
+        return new InstantCommand(() -> frontSolenoid.set(DoubleSolenoid.Value.kReverse));
     }
 
     public InstantCommand openBackSolenoid() {
