@@ -5,7 +5,11 @@
 package frc.robot;
 
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
+import com.spikes2212.command.genericsubsystem.commands.smartmotorcontrollersubsystem.MoveSmartMotorControllerSubsystem;
+import com.spikes2212.control.FeedForwardSettings;
+import com.spikes2212.control.PIDSettings;
 import com.spikes2212.dashboard.RootNamespace;
+import com.spikes2212.util.UnifiedControlMode;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -32,8 +36,11 @@ public class Robot extends TimedRobot {
         drivetrain = Drivetrain.getInstance();
         climber = Climber.getInstance();
         gripper = Gripper.getInstance();
-//        lower = Arm.getLowerInstance();
-//        upper = Arm.getUpperInstance();
+        lower = Arm.getLowerInstance();
+        upper = Arm.getUpperInstance();
+        upper.setDefaultCommand(new MoveSmartMotorControllerSubsystem(upper, PIDSettings.EMPTY_PID_SETTINGS,
+                FeedForwardSettings.EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT,
+                () -> Arm.UPPER_SHAFT_IDLE_SPEED));
         oi = OI.getInstance();
         Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
         namespace.putData("compressor on", new InstantCommand(compressor::enableDigital));
@@ -46,8 +53,8 @@ public class Robot extends TimedRobot {
         drivetrain.periodic();
         climber.periodic();
         gripper.periodic();
-//        lower.periodic();
-//        upper.periodic();
+        lower.periodic();
+        upper.periodic();
         namespace.update();
         CommandScheduler.getInstance().run();
     }

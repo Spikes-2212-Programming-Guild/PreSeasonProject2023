@@ -17,8 +17,9 @@ import java.util.function.Supplier;
  */
 public class Arm extends SparkMaxGenericSubsystem {
 
-    public static final double UPPER_SHAFT_MOVE_SPEED = 0.4;
+    public static final double UPPER_SHAFT_MOVE_SPEED = -0.4;
     public static final double LOWER_SHAFT_MOVE_SPEED = 0.65;
+    public static final double UPPER_SHAFT_IDLE_SPEED = -0.05;
 
     public enum State {
         //@TODO calculate

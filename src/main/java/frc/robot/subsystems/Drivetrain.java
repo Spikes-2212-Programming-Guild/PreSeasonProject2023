@@ -40,11 +40,11 @@ public class Drivetrain extends TankDrivetrain {
     private final PIDSettings zoomToTablePIDSettings;
 
     private final Namespace shortDrivePIDNamespace = namespace.addChild("short drive pid");
-    private final Supplier<Double> kPShortDrive = shortDrivePIDNamespace.addConstantDouble("kP", 0);
+    private final Supplier<Double> kPShortDrive = shortDrivePIDNamespace.addConstantDouble("kP", 0.15);
     private final Supplier<Double> kIShortDrive = shortDrivePIDNamespace.addConstantDouble("kI", 0);
     private final Supplier<Double> kDShortDrive = shortDrivePIDNamespace.addConstantDouble("kD", 0);
     private final Supplier<Double> toleranceShortDrive = shortDrivePIDNamespace.addConstantDouble("tolerance", 0);
-    private final Supplier<Double> waitTimeShortDrive = shortDrivePIDNamespace.addConstantDouble("wait time", 0);
+    private final Supplier<Double> waitTimeShortDrive = shortDrivePIDNamespace.addConstantDouble("wait time", 1);
     private final PIDSettings shortDrivePIDSettings;
 
     private final CANSparkMax left1;

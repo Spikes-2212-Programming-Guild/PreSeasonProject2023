@@ -38,7 +38,6 @@ public class OI /*GEVALD*/ {
 
         xbox.getLBButton().whenPressed(new CloseGripper(gripper));
         xbox.getRBButton().whenPressed(new OpenGripper(gripper));
-
         xbox.getRightStickButton().whenPressed(new CenterOnCube(drivetrain, vision));
         xbox.getLeftStickButton().whenPressed(new CenterOnTable(drivetrain, vision));
 
@@ -65,11 +64,6 @@ public class OI /*GEVALD*/ {
         xbox.getLBButton().whenPressed(gripper.openSolenoid());
         xbox.getRBButton().whenPressed(gripper.closeSolenoid());
 
-//        xbox.getLeftButton().whileHeld(new MoveGenericSubsystem(lowerShaft, -Arm.LOWER_SHAFT_MOVE_SPEED));
-//        xbox.getRightButton().whileHeld(new MoveGenericSubsystem(lowerShaft, Arm.LOWER_SHAFT_MOVE_SPEED));
-//        xbox.getDownButton().whileHeld(new MoveGenericSubsystem(upperShaft, Arm.UPPER_SHAFT_MOVE_SPEED));
-//        xbox.getUpButton().whileHeld(new MoveGenericSubsystem(upperShaft, -Arm.UPPER_SHAFT_MOVE_SPEED));
-
         xbox.getLeftButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
                         UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.LOWER_SHAFT_MOVE_SPEED) {
@@ -92,7 +86,7 @@ public class OI /*GEVALD*/ {
 
         xbox.getDownButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
@@ -102,7 +96,7 @@ public class OI /*GEVALD*/ {
 
         xbox.getUpButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
