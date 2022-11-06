@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.spikes2212.command.drivetrains.commands.DriveTank;
 import com.spikes2212.command.drivetrains.commands.DriveTankWithPID;
 import com.spikes2212.control.noise.NoiseReducer;
+import com.spikes2212.dashboard.Namespace;
 import com.spikes2212.dashboard.RootNamespace;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.Climber;
@@ -20,7 +21,7 @@ public class Climb extends SequentialCommandGroup {
      * The distance from the deck in which the {@link Climber} back solenoid needs to open in cm.
      */
     private static final Supplier<Double> BACK_AWAY_FROM_DECK_DISTANCE =
-            namespace.addConstantDouble("back away from deck distance", -20);
+            namespace.addConstantDouble("back away from deck distance", -10);
 
     private static final Supplier<Double> REQUIRED_PITCH_RATE =
             namespace.addConstantDouble("required pitch rate", 4);
@@ -41,14 +42,22 @@ public class Climb extends SequentialCommandGroup {
 
     public Climb(Drivetrain drivetrain, Climber climber) {
         addCommands(
+                new InstantCommand(() -> namespace.putNumber("step", 1)),
                 backAwayFromDeck(drivetrain),
+                new InstantCommand(() -> namespace.putNumber("step", 2)),
                 openFrontSolenoid(climber),
+                new InstantCommand(() -> namespace.putNumber("step", 3)),
                 getWheelsAboveDeck(drivetrain),
+                new InstantCommand(() -> namespace.putNumber("step", 4)),
                 getOnDeck(drivetrain, climber),
+                new InstantCommand(() -> namespace.putNumber("step", 5)),
                 openBackSolenoid(climber),
+                new InstantCommand(() -> namespace.putNumber("step", 6)),
                 getFullyOnDeck(drivetrain),
-                closeBackSolenoid(climber)
-        );
+                new InstantCommand(() -> namespace.putNumber("step", 7)),
+                closeBackSolenoid(climber),
+                new InstantCommand(() -> namespace.putNumber("step", 8))
+                );
     }
 
     private Command getFullyOnDeck(Drivetrain drivetrain) {
@@ -65,10 +74,12 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private Command backAwayFromDeck(Drivetrain drivetrain) {
-        return resetEncoders(drivetrain).andThen(new DriveTankWithPID(drivetrain, drivetrain.getShortDrivePIDSettings(),
-                drivetrain.getShortDrivePIDSettings(), BACK_AWAY_FROM_DECK_DISTANCE,
-                BACK_AWAY_FROM_DECK_DISTANCE, drivetrain::getLeftEncoderPosition,
-                drivetrain::getRightEncoderPosition));
+        return resetEncoders(drivetrain).andThen(
+                new DriveTank(drivetrain, -DRIVE_SPEED, -DRIVE_SPEED).until(
+                        () -> drivetrain.getLeftEncoderPosition() < BACK_AWAY_FROM_DECK_DISTANCE.get() &&
+                                drivetrain.getRightEncoderPosition() < BACK_AWAY_FROM_DECK_DISTANCE.get()
+                )
+        );
     }
 
     private Command openFrontSolenoid(Climber climber) {
@@ -76,9 +87,12 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private Command getWheelsAboveDeck(Drivetrain drivetrain) {
-        return new DriveTankWithPID(drivetrain, drivetrain.getShortDrivePIDSettings(),
-                drivetrain.getShortDrivePIDSettings(), GET_WHEELS_ON_DECK_DISTANCE, GET_WHEELS_ON_DECK_DISTANCE,
-                drivetrain::getLeftEncoderPosition, drivetrain::getRightEncoderPosition);
+        return resetEncoders(drivetrain).andThen(
+                new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).until(
+                        () -> drivetrain.getLeftEncoderPosition() > GET_WHEELS_ON_DECK_DISTANCE.get() &&
+                                drivetrain.getRightEncoderPosition() > GET_WHEELS_ON_DECK_DISTANCE.get()
+                )
+        );
     }
 
     private Command openBackSolenoid(Climber climber) {
@@ -103,5 +117,9 @@ public class Climb extends SequentialCommandGroup {
 
     private InstantCommand closeBackSolenoid(Climber climber) {
         return climber.closeBackSolenoid();
+    }
+
+    public static void periodic() {
+        namespace.update();
     }
 }

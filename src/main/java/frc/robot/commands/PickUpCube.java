@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
@@ -20,7 +21,8 @@ public class PickUpCube extends SequentialCommandGroup {
                 );
     }
 
-    public ParallelRaceGroup driveForward(Drivetrain drivetrain, Gripper gripper) {
-        return new DriveArcade(drivetrain, DRIVE_SPEED, 0).withInterrupt(gripper::getLimit);
+    public CommandBase driveForward(Drivetrain drivetrain, Gripper gripper) {
+        return new DriveArcade(drivetrain, DRIVE_SPEED, 0);
+                //.withInterrupt(gripper::getLimit);
     }
 }
