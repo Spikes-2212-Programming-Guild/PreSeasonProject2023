@@ -43,17 +43,21 @@ public class Climb extends SequentialCommandGroup {
     public Climb(Drivetrain drivetrain, Climber climber) {
         addCommands(
                 new InstantCommand(() -> namespace.putNumber("step", 1)),
-                backAwayFromDeck(drivetrain),
+//                backAwayFromDeck(drivetrain),
                 new InstantCommand(() -> namespace.putNumber("step", 2)),
-                openFrontSolenoid(climber),
+//                openFrontSolenoid(climber),
                 new InstantCommand(() -> namespace.putNumber("step", 3)),
-                getWheelsAboveDeck(drivetrain),
+                getWheelsAboveDeck(drivetrain, climber),
+//                new WaitCommand(2),
                 new InstantCommand(() -> namespace.putNumber("step", 4)),
                 getOnDeck(drivetrain, climber),
+//                new WaitCommand(2),
                 new InstantCommand(() -> namespace.putNumber("step", 5)),
                 openBackSolenoid(climber),
+//                new WaitCommand(2),
                 new InstantCommand(() -> namespace.putNumber("step", 6)),
                 getFullyOnDeck(drivetrain),
+//                new WaitCommand(2),
                 new InstantCommand(() -> namespace.putNumber("step", 7)),
                 closeBackSolenoid(climber),
                 new InstantCommand(() -> namespace.putNumber("step", 8))
@@ -65,7 +69,7 @@ public class Climb extends SequentialCommandGroup {
                 new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).until(
                         () -> drivetrain.getLeftEncoderPosition() > DISTANCE_TO_MOVE_ON_DECK.get() &&
                                 drivetrain.getRightEncoderPosition() > DISTANCE_TO_MOVE_ON_DECK.get()
-                )
+                ).withTimeout(6)
         );
     }
 
@@ -86,17 +90,19 @@ public class Climb extends SequentialCommandGroup {
         return climber.openFrontSolenoid().andThen(new WaitCommand(OPEN_SOLENOID_WAIT_TIME.get()));
     }
 
-    private Command getWheelsAboveDeck(Drivetrain drivetrain) {
-        return resetEncoders(drivetrain).andThen(
-                new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).until(
-                        () -> drivetrain.getLeftEncoderPosition() > GET_WHEELS_ON_DECK_DISTANCE.get() &&
-                                drivetrain.getRightEncoderPosition() > GET_WHEELS_ON_DECK_DISTANCE.get()
-                )
+    private Command getWheelsAboveDeck(Drivetrain drivetrain, Climber climber) {
+        return new SequentialCommandGroup(
+                new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED) {
+                    @Override
+                    public void end(boolean i) {}
+                }.withTimeout(0.3),
+                openFrontSolenoid(climber),
+                new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).withTimeout(1)
         );
     }
 
     private Command openBackSolenoid(Climber climber) {
-        return climber.openBackSolenoid();
+        return climber.openBackSolenoid().andThen(new WaitCommand(0.5));
     }
 
     private InstantCommand closeFrontSolenoid(Climber climber) {
@@ -107,12 +113,12 @@ public class Climb extends SequentialCommandGroup {
         return resetEncoders(drivetrain).andThen(
                 new ParallelCommandGroup(
                         closeFrontSolenoid(climber),
-                        new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).until(
-                                () -> drivetrain.getLeftEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get() &&
-                                        drivetrain.getRightEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get()
+                        new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).withTimeout(1)
+//                                until(
+//                                () -> drivetrain.getLeftEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get() &&
+//                                        drivetrain.getRightEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get()
                         )
-                )
-        );
+                ).andThen(new WaitCommand(1));
     }
 
     private InstantCommand closeBackSolenoid(Climber climber) {

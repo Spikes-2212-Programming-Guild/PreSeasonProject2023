@@ -32,7 +32,7 @@ public class Vision extends DashboardedSubsystem {
         if (result.hasTargets()) {
             return result.getBestTarget().getYaw();
         }
-        return 0;// no target
+        return 10;// no target
     }
 
     public void setDriverMode(boolean mode) {

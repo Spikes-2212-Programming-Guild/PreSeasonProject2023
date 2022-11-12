@@ -5,8 +5,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.spikes2212.command.drivetrains.TankDrivetrain;
+import com.spikes2212.control.FeedForwardSettings;
 import com.spikes2212.control.PIDSettings;
 import com.spikes2212.dashboard.Namespace;
+import com.spikes2212.dashboard.RootNamespace;
+import com.spikes2212.util.BustedMotorControllerGroup;
 import com.spikes2212.util.PigeonWrapper;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -15,6 +18,15 @@ import frc.robot.RobotMap;
 import java.util.function.Supplier;
 
 public class Drivetrain extends TankDrivetrain {
+
+    private static final RootNamespace BUSTED_MOTOR_CONTROLLER_VALUES =
+            new RootNamespace("busted motor controller values");
+
+    private static final Supplier<Double> LEFT_CORRECTION =
+            BUSTED_MOTOR_CONTROLLER_VALUES.addConstantDouble("left correction", 1);
+
+    private static final Supplier<Double> RIGHT_CORRECTION =
+            BUSTED_MOTOR_CONTROLLER_VALUES.addConstantDouble("right correction", 1);
 
     public static final double WHEEL_DIAMETER_IN_INCHES = 6;
     public static final double INCHES_TO_CM = 2.54;
@@ -30,6 +42,10 @@ public class Drivetrain extends TankDrivetrain {
     private final Supplier<Double> toleranceCamera = cameraPIDNamespace.addConstantDouble("tolerance", 0);
     private final Supplier<Double> waitTimeCamera = cameraPIDNamespace.addConstantDouble("wait time", 0);
     private final PIDSettings cameraPIDSettings;
+    private final Supplier<Double> kSCamera = cameraPIDNamespace.addConstantDouble("kS", 0);
+    private final Supplier<Double> kVCamera = cameraPIDNamespace.addConstantDouble("kV", 0);
+    private final Supplier<Double> kACamera = cameraPIDNamespace.addConstantDouble("kA", 0);
+    private final FeedForwardSettings cameraFFSettings;
 
     private final Namespace zoomToTablePIDNamespace = namespace.addChild("zoom to table pid");
     private final Supplier<Double> kPZoom = zoomToTablePIDNamespace.addConstantDouble("kP", 0);
@@ -64,21 +80,24 @@ public class Drivetrain extends TankDrivetrain {
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_LEFT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_1, CANSparkMaxLowLevel.MotorType.kBrushless),
                     new CANSparkMax(RobotMap.CAN.DRIVETRAIN_RIGHT_SPARKMAX_2, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    new PigeonWrapper(new TalonSRX(RobotMap.CAN.PIGEON_TALON))
+                    new PigeonWrapper(new TalonSRX(RobotMap.CAN.PIGEON_TALON)), LEFT_CORRECTION, RIGHT_CORRECTION
             );
         }
         return instance;
     }
 
     private Drivetrain(String namespaceName, CANSparkMax left1, CANSparkMax left2,
-                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon) {
-        super(namespaceName, new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));
+                       CANSparkMax right1, CANSparkMax right2, PigeonWrapper pigeon, Supplier<Double> leftCorrection,
+                       Supplier<Double> rightCorrection) {
+        super(namespaceName, new BustedMotorControllerGroup(leftCorrection, left1, left2),
+                new BustedMotorControllerGroup(rightCorrection, right1, right2));
         this.cameraPIDSettings = new PIDSettings(kPCamera, kICamera, kDCamera,
                 toleranceCamera, waitTimeCamera);
         this.zoomToTablePIDSettings = new PIDSettings(kPZoom, kIZoom, kDZoom,
                 toleranceZoom, waitTimeZoom);
         this.shortDrivePIDSettings = new PIDSettings(kPShortDrive, kIShortDrive, kDShortDrive,
                 toleranceShortDrive, waitTimeShortDrive);
+        this.cameraFFSettings = new FeedForwardSettings(kSCamera, kVCamera, kACamera);
         this.left1 = left1;
         this.left2 = left2;
         this.right1 = right1;
@@ -137,6 +156,10 @@ public class Drivetrain extends TankDrivetrain {
 
     public PIDSettings getCameraPIDSettings() {
         return cameraPIDSettings;
+    }
+
+    public FeedForwardSettings getCameraFeedForwardSettings() {
+        return cameraFFSettings;
     }
 
     public PIDSettings getZoomToTablePIDSettings() {

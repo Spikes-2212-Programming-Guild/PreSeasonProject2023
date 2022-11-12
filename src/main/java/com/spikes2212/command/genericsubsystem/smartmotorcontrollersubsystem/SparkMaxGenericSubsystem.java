@@ -88,7 +88,7 @@ public class SparkMaxGenericSubsystem extends DashboardedSubsystem implements Sm
     @Override
     public void configureLoop(PIDSettings pidSettings, FeedForwardSettings feedForwardSettings,
                               TrapezoidProfileSettings trapezoidProfileSettings) {
-        master.restoreFactoryDefaults();
+//        master.restoreFactoryDefaults(); @todo this disables the soft limit. need to find a solution
         configPIDF(pidSettings, feedForwardSettings);
         configureTrapezoid(trapezoidProfileSettings);
     }

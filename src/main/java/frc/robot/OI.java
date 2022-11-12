@@ -1,11 +1,10 @@
 package frc.robot;
 
-import com.spikes2212.command.genericsubsystem.commands.MoveGenericSubsystem;
 import com.spikes2212.command.genericsubsystem.commands.smartmotorcontrollersubsystem.MoveSmartMotorControllerSubsystem;
-import com.spikes2212.control.PIDSettings;
 import com.spikes2212.util.UnifiedControlMode;
 import com.spikes2212.util.XboxControllerWrapper;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Arm.State;
@@ -24,10 +23,10 @@ public class OI /*GEVALD*/ {
 
     public static OI getInstance() {
         if (instance == null) {
-//            instance = new OI(Drivetrain.getInstance(), Gripper.getInstance(),
-//                    Climber.getInstance(), Vision.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance());
+            instance = new OI(Drivetrain.getInstance(), Gripper.getInstance(),
+                    Climber.getInstance(), Vision.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance());
 //            instance = new OI(Climber.getInstance());
-            instance = new OI(Gripper.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance(), Climber.getInstance());
+//            instance = new OI(Gripper.getInstance(), Arm.getLowerInstance(), Arm.getUpperInstance(), Climber.getInstance());
         }
         return instance;
     }
@@ -41,32 +40,23 @@ public class OI /*GEVALD*/ {
         xbox.getRightStickButton().whenPressed(new CenterOnCube(drivetrain, vision));
         xbox.getLeftStickButton().whenPressed(new CenterOnTable(drivetrain, vision));
 
-        xbox.getLTButton().whenActive(new MoveArm(lowerShaft, upperShaft, State.RESTING));
+//        xbox.getLTButton().whenActive(new MoveArm(lowerShaft, upperShaft, State.RESTING));
+        xbox.getLTButton().whenActive(new InstantCommand(() -> {}, drivetrain));
         xbox.getRTButton().whenActive(new PickUpCube(drivetrain, gripper, vision));
 
-        xbox.getGreenButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PICKING));
-        xbox.getBlueButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ZERO));
-        xbox.getYellowButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ONE));
-        xbox.getRedButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_TWO));
+//        xbox.getGreenButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PICKING));
+//        xbox.getBlueButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ZERO));
+//        xbox.getYellowButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_ONE));
+//        xbox.getRedButton().whenPressed(new MoveArm(lowerShaft, upperShaft, State.PLACING_TWO));
 
-        xbox.getLeftButton().whileHeld(new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS,
-                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.LOWER_SHAFT_MOVE_SPEED));
-        xbox.getRightButton().whileHeld(new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS,
-                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.LOWER_SHAFT_MOVE_SPEED));
-
-        xbox.getDownButton().whileHeld(new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS,
-                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED));
-        xbox.getUpButton().whileHeld(new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS,
-                EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED));
-    }
-
-    private OI(Gripper gripper, Arm lowerShaft, Arm upperShaft, Climber climber) {
-        xbox.getLBButton().whenPressed(gripper.openSolenoid());
-        xbox.getRBButton().whenPressed(gripper.closeSolenoid());
+        xbox.getGreenButton().whenPressed(climber.openBackSolenoid());
+        xbox.getRedButton().whenPressed(climber.closeBackSolenoid());
+        xbox.getBlueButton().whenPressed(climber.openFrontSolenoid());
+        xbox.getYellowButton().whenPressed(climber.closeFrontSolenoid());
 
         xbox.getLeftButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.LOWER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.LOWER_SHAFT_MOVE_BACKWARD_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
@@ -76,7 +66,7 @@ public class OI /*GEVALD*/ {
 
         xbox.getRightButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.LOWER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.LOWER_SHAFT_MOVE_FORWARD_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
@@ -86,7 +76,7 @@ public class OI /*GEVALD*/ {
 
         xbox.getDownButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> Arm.UPPER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.UPPER_SHAFT_MOVE_DOWN_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
@@ -96,7 +86,52 @@ public class OI /*GEVALD*/ {
 
         xbox.getUpButton().whileHeld(
                 new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
-                        UnifiedControlMode.PERCENT_OUTPUT, () -> -Arm.UPPER_SHAFT_MOVE_SPEED) {
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.UPPER_SHAFT_MOVE_UP_SPEED) {
+                    @Override
+                    public boolean isFinished() {
+                        return false;
+                    }
+                }
+        );
+    }
+
+    private OI(Gripper gripper, Arm lowerShaft, Arm upperShaft, Climber climber) {
+        xbox.getLBButton().whenPressed(gripper.openSolenoid());
+        xbox.getRBButton().whenPressed(gripper.closeSolenoid());
+
+        xbox.getLeftButton().whileHeld(
+                new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.LOWER_SHAFT_MOVE_BACKWARD_SPEED) {
+                    @Override
+                    public boolean isFinished() {
+                        return false;
+                    }
+                }
+        );
+
+        xbox.getRightButton().whileHeld(
+                new MoveSmartMotorControllerSubsystem(lowerShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.LOWER_SHAFT_MOVE_FORWARD_SPEED) {
+                    @Override
+                    public boolean isFinished() {
+                        return false;
+                    }
+                }
+        );
+
+        xbox.getDownButton().whileHeld(
+                new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.UPPER_SHAFT_MOVE_DOWN_SPEED) {
+                    @Override
+                    public boolean isFinished() {
+                        return false;
+                    }
+                }
+        );
+
+        xbox.getUpButton().whileHeld(
+                new MoveSmartMotorControllerSubsystem(upperShaft, EMPTY_PID_SETTINGS, EMPTY_FFSETTINGS,
+                        UnifiedControlMode.PERCENT_OUTPUT, Arm.UPPER_SHAFT_MOVE_UP_SPEED) {
                     @Override
                     public boolean isFinished() {
                         return false;
@@ -110,11 +145,13 @@ public class OI /*GEVALD*/ {
         xbox.getYellowButton().whenPressed(climber.closeFrontSolenoid());
     }
 
-    public double getLeftX() {
-        return left.getX();
+    public double getLeftY() {
+//        return left.getX();
+        return -xbox.getLeftY();
     }
 
-    public double getRightY() {
-        return -right.getY();
+    public double getRightX() {
+//        return -right.getY();
+        return xbox.getRightX();
     }
 }

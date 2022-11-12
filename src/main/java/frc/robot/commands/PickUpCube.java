@@ -10,7 +10,7 @@ import frc.robot.subsystems.Vision;
 
 public class PickUpCube extends SequentialCommandGroup {
 
-    public static final double DRIVE_SPEED = 0.3;
+    public static final double DRIVE_SPEED = 0.6;
 
     public PickUpCube(Drivetrain drivetrain, Gripper gripper, Vision vision) {
         addRequirements(drivetrain, gripper);
@@ -18,11 +18,12 @@ public class PickUpCube extends SequentialCommandGroup {
                 new CenterOnCube(drivetrain, vision),
                 driveForward(drivetrain, gripper),
                 new CloseGripper(gripper)
-                );
+        );
     }
 
-    public CommandBase driveForward(Drivetrain drivetrain, Gripper gripper) {
-        return new DriveArcade(drivetrain, DRIVE_SPEED, 0);
-                //.withInterrupt(gripper::getLimit);
+    private CommandBase driveForward(Drivetrain drivetrain, Gripper gripper) {
+//        return new DriveArcade(drivetrain, DRIVE_SPEED, 0);
+//                .withInterrupt(gripper::getLimit);
+        return new DriveArcade(drivetrain, DRIVE_SPEED, 0).withInterrupt(gripper::getLimit);
     }
 }
