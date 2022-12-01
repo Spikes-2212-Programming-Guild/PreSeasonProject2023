@@ -5,11 +5,7 @@
 package frc.robot;
 
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
-import com.spikes2212.command.genericsubsystem.commands.smartmotorcontrollersubsystem.MoveSmartMotorControllerSubsystem;
-import com.spikes2212.control.FeedForwardSettings;
-import com.spikes2212.control.PIDSettings;
 import com.spikes2212.dashboard.RootNamespace;
-import com.spikes2212.util.UnifiedControlMode;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -42,7 +38,6 @@ public class Robot extends TimedRobot {
         Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
         namespace.putData("compressor on", new InstantCommand(compressor::enableDigital));
         namespace.putData("compressor off", new InstantCommand(compressor::disable));
-        namespace.putString("plz", "plz");
     }
 
     @Override
@@ -75,24 +70,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        DriveArcade driveArcade = new DriveArcade(drivetrain, oi::getLeftY, oi::getRightX);
+        DriveArcade driveArcade = new DriveArcade(drivetrain, oi::getRightY, oi::getLeftX);
         drivetrain.setDefaultCommand(driveArcade);
-//        upper.setDefaultCommand(new MoveSmartMotorControllerSubsystem(upper, PIDSettings.EMPTY_PID_SETTINGS,
-//                                        FeedForwardSettings.EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT,
-//                                        Arm.UPPER_SHAFT_IDLE_SPEED) {
-//                                    @Override
-//                                    public boolean isFinished() {
-//                                        return false;
-//                                    }
-//                                }
-//        );
-//        lower.setDefaultCommand(new MoveSmartMotorControllerSubsystem(upper, PIDSettings.EMPTY_PID_SETTINGS,
-//                FeedForwardSettings.EMPTY_FFSETTINGS, UnifiedControlMode.PERCENT_OUTPUT, Arm.LOWER_SHAFT_IDLE_SPEED) {
-//            @Override
-//            public boolean isFinished() {
-//                return false;
-//            }
-//        });
     }
 
     @Override

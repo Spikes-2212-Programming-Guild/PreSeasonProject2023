@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.spikes2212.command.drivetrains.commands.DriveArcade;
 import com.spikes2212.command.drivetrains.commands.DriveTank;
 import com.spikes2212.command.drivetrains.commands.DriveTankWithPID;
 import com.spikes2212.control.noise.NoiseReducer;
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
 
 public class Climb extends SequentialCommandGroup {
 
-    public static final double DRIVE_SPEED = 0.3;
+    public final double DRIVE_SPEED = 0.4;
 
     private static final RootNamespace namespace = new RootNamespace("climb command");
 
@@ -23,18 +24,8 @@ public class Climb extends SequentialCommandGroup {
     private static final Supplier<Double> BACK_AWAY_FROM_DECK_DISTANCE =
             namespace.addConstantDouble("back away from deck distance", -10);
 
-    private static final Supplier<Double> REQUIRED_PITCH_RATE =
-            namespace.addConstantDouble("required pitch rate", 4);
-
-    private static final Supplier<Double> GET_WHEELS_ON_DECK_DISTANCE =
-            namespace.addConstantDouble("get wheels on deck distance", 70);
-
-
     private static final Supplier<Double> OPEN_SOLENOID_WAIT_TIME =
             namespace.addConstantDouble("open solenoid wait time", 0.5);
-
-    private static final Supplier<Double> DISTANCE_TO_GET_ON_DECK =
-            namespace.addConstantDouble("distance to get on deck", 50);
 
     //in cm
     private static final Supplier<Double> DISTANCE_TO_MOVE_ON_DECK =
@@ -42,26 +33,13 @@ public class Climb extends SequentialCommandGroup {
 
     public Climb(Drivetrain drivetrain, Climber climber) {
         addCommands(
-                new InstantCommand(() -> namespace.putNumber("step", 1)),
-//                backAwayFromDeck(drivetrain),
-                new InstantCommand(() -> namespace.putNumber("step", 2)),
-//                openFrontSolenoid(climber),
-                new InstantCommand(() -> namespace.putNumber("step", 3)),
                 getWheelsAboveDeck(drivetrain, climber),
-//                new WaitCommand(2),
-                new InstantCommand(() -> namespace.putNumber("step", 4)),
                 getOnDeck(drivetrain, climber),
-//                new WaitCommand(2),
-                new InstantCommand(() -> namespace.putNumber("step", 5)),
                 openBackSolenoid(climber),
-//                new WaitCommand(2),
-                new InstantCommand(() -> namespace.putNumber("step", 6)),
                 getFullyOnDeck(drivetrain),
-//                new WaitCommand(2),
-                new InstantCommand(() -> namespace.putNumber("step", 7)),
                 closeBackSolenoid(climber),
-                new InstantCommand(() -> namespace.putNumber("step", 8))
-                );
+                new DriveArcade(drivetrain, DRIVE_SPEED, 0.0).withTimeout(0.05)
+        );
     }
 
     private Command getFullyOnDeck(Drivetrain drivetrain) {
@@ -77,15 +55,6 @@ public class Climb extends SequentialCommandGroup {
         return new InstantCommand(drivetrain::resetEncoders);
     }
 
-    private Command backAwayFromDeck(Drivetrain drivetrain) {
-        return resetEncoders(drivetrain).andThen(
-                new DriveTank(drivetrain, -DRIVE_SPEED, -DRIVE_SPEED).until(
-                        () -> drivetrain.getLeftEncoderPosition() < BACK_AWAY_FROM_DECK_DISTANCE.get() &&
-                                drivetrain.getRightEncoderPosition() < BACK_AWAY_FROM_DECK_DISTANCE.get()
-                )
-        );
-    }
-
     private Command openFrontSolenoid(Climber climber) {
         return climber.openFrontSolenoid().andThen(new WaitCommand(OPEN_SOLENOID_WAIT_TIME.get()));
     }
@@ -94,7 +63,8 @@ public class Climb extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED) {
                     @Override
-                    public void end(boolean i) {}
+                    public void end(boolean i) {
+                    }
                 }.withTimeout(0.3),
                 openFrontSolenoid(climber),
                 new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).withTimeout(1)
@@ -113,12 +83,7 @@ public class Climb extends SequentialCommandGroup {
         return resetEncoders(drivetrain).andThen(
                 new ParallelCommandGroup(
                         closeFrontSolenoid(climber),
-                        new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).withTimeout(1)
-//                                until(
-//                                () -> drivetrain.getLeftEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get() &&
-//                                        drivetrain.getRightEncoderPosition() > DISTANCE_TO_GET_ON_DECK.get()
-                        )
-                ).andThen(new WaitCommand(1));
+                        new DriveTank(drivetrain, DRIVE_SPEED, DRIVE_SPEED).withTimeout(1)));
     }
 
     private InstantCommand closeBackSolenoid(Climber climber) {
