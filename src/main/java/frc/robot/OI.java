@@ -37,7 +37,6 @@ public class OI /*GEVALD*/ {
         xbox.getRBButton().whenPressed(gripper.closeSolenoid());
 
         xbox.getLTButton().whenActive(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-        xbox.getRTButton().whenActive(new PickUpCube(drivetrain, gripper, vision));
 
         xbox.getLeftButton().whenPressed(climber.openFrontSolenoid());
         xbox.getRightButton().whenPressed(climber.closeBackSolenoid());
