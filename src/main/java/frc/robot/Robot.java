@@ -5,24 +5,50 @@
 package frc.robot;
 
 import com.spikes2212.command.drivetrains.commands.DriveArcade;
+import com.spikes2212.dashboard.RootNamespace;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.Climb;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Gripper;
 
 public class Robot extends TimedRobot {
 
+    private final RootNamespace namespace = new RootNamespace("robot");
     private Drivetrain drivetrain;
+    private Climber climber;
+    private Gripper gripper;
+    private Arm lower;
+    private Arm upper;
     private OI oi;
 
     @Override
     public void robotInit() {
         drivetrain = Drivetrain.getInstance();
+        climber = Climber.getInstance();
+        gripper = Gripper.getInstance();
+        lower = Arm.getLowerInstance();
+        upper = Arm.getUpperInstance();
         oi = OI.getInstance();
+        Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+        namespace.putData("compressor on", new InstantCommand(compressor::enableDigital));
+        namespace.putData("compressor off", new InstantCommand(compressor::disable));
     }
 
     @Override
     public void robotPeriodic() {
+        Climb.periodic();
         drivetrain.periodic();
+        climber.periodic();
+        gripper.periodic();
+        lower.periodic();
+        upper.periodic();
+        namespace.update();
         CommandScheduler.getInstance().run();
     }
 

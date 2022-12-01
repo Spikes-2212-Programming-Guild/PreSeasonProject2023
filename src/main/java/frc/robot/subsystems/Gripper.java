@@ -20,8 +20,9 @@ public class Gripper extends DashboardedSubsystem {
 
     public static Gripper getInstance() {
         if (instance == null) {
-            instance = new Gripper("gripper", new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.PCM.GRIPPER_SOLENOID_FORWARD,
-                    RobotMap.PCM.GRIPPER_SOLENOID_REVERSE), new DigitalInput(RobotMap.DIO.GRIPPER_LIMIT));
+            instance = new Gripper("gripper", new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+                    RobotMap.PCM.GRIPPER_SOLENOID_FORWARD, RobotMap.PCM.GRIPPER_SOLENOID_REVERSE),
+                    new DigitalInput(RobotMap.DIO.GRIPPER_LIMIT));
         }
         return instance;
     }
@@ -34,11 +35,17 @@ public class Gripper extends DashboardedSubsystem {
     }
 
     public InstantCommand openSolenoid() {
-        return new InstantCommand(() -> solenoid.set(DoubleSolenoid.Value.kForward));
+        return new InstantCommand(() -> {
+            solenoid.set(DoubleSolenoid.Value.kForward);
+            namespace.putString("solenoid value", solenoid.get()::toString);
+        });
     }
 
     public InstantCommand closeSolenoid() {
-        return new InstantCommand(() -> solenoid.set(DoubleSolenoid.Value.kReverse));
+        return new InstantCommand(() -> {
+            solenoid.set(DoubleSolenoid.Value.kReverse);
+            namespace.putString("solenoid value", solenoid.get()::toString);
+        });
     }
 
     public boolean getLimit() {

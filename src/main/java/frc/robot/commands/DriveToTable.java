@@ -29,7 +29,7 @@ public class DriveToTable extends SequentialCommandGroup {
     }
 
     private DriveTankWithPID driveTankWithPID(Drivetrain drivetrain) {
-        return new DriveTankWithPID(drivetrain, drivetrain.getDrivePIDSettings(), drivetrain.getDrivePIDSettings(),
+        return new DriveTankWithPID(drivetrain, drivetrain.getZoomToTablePIDSettings(), drivetrain.getZoomToTablePIDSettings(),
                 leftSetpoint, rightSetpoint, drivetrain::getLeftEncoderPosition, drivetrain::getRightEncoderPosition);
     }
 }

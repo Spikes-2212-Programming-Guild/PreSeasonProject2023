@@ -61,7 +61,7 @@ public class MoveSmartMotorControllerSubsystem extends CommandBase {
     public MoveSmartMotorControllerSubsystem(SmartMotorControllerSubsystem subsystem, PIDSettings pidSettings,
                                                 FeedForwardSettings feedForwardSettings,
                                                 UnifiedControlMode controlMode, Supplier<Double> setpoint) {
-        addRequirements(subsystem);
+//        addRequirements(subsystem);
         this.subsystem = subsystem;
         this.controlMode = controlMode;
         this.pidSettings = pidSettings;
